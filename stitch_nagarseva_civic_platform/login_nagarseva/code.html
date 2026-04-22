@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - NagarSeva</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#eff4ff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#1d4ed8",
+                      "inverse-primary": "#b7c4ff",
+                      "primary-fixed-dim": "#b7c4ff",
+                      "on-tertiary-container": "#76eab6",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "on-surface": "#0d1c2e",
+                      "on-surface-variant": "#434655",
+                      "inverse-surface": "#233144",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-bright": "#f8f9ff",
+                      "on-secondary-fixed": "#131b2e",
+                      "secondary-fixed": "#dae2fd",
+                      "background": "#f8f9ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#ccdbf3",
+                      "on-primary-fixed-variant": "#0039b5",
+                      "on-secondary-container": "#5c647a",
+                      "surface-variant": "#d5e3fc",
+                      "surface-container-highest": "#d5e3fc",
+                      "primary": "#0037b0",
+                      "on-tertiary-fixed": "#002114",
+                      "surface": "#f8f9ff",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "outline-variant": "#c4c5d7",
+                      "surface-tint": "#2151da",
+                      "tertiary-fixed": "#85f8c4",
+                      "on-primary-container": "#cad3ff",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "secondary-container": "#dae2fd",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#e6eeff",
+                      "secondary": "#565e74",
+                      "tertiary-container": "#006948",
+                      "on-primary-fixed": "#001551",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#dce1ff",
+                      "on-background": "#0d1c2e",
+                      "outline": "#747686",
+                      "surface-container-high": "#dce9ff",
+                      "tertiary": "#004f35",
+                      "error": "#ba1a1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-xl": "48px",
+                      "stack-lg": "24px",
+                      "stack-xs": "4px",
+                      "unit": "4px",
+                      "stack-sm": "8px",
+                      "margin-page": "40px",
+                      "stack-md": "16px",
+                      "gutter": "24px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Public Sans"
+                      ],
+                      "data-mono": [
+                              "JetBrains Mono"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "headline-xl": [
+                              "Public Sans"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+</head>
+<!-- 
+  Navigation Shell is suppressed per the "Automatic Suppression" rule for transactional/linear intents like Login.
+-->
+<body class="bg-surface-container-low min-h-screen flex items-center justify-center p-gutter antialiased">
+<main class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-lg shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),0_2px_4px_-2px_rgba(15,23,42,0.05)]">
+<!-- Header Section -->
+<header class="text-center mb-stack-lg">
+<div aria-hidden="true" class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-container text-on-primary-container mb-stack-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-stack-xs tracking-tight">NagarSeva</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Sign in to access civic services</p>
+</header>
+<!-- Form Section -->
+<form action="#" class="space-y-stack-md" method="POST">
+<!-- Email Input -->
+<div class="space-y-unit">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase" for="email">Email Address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+</div>
+<input autocomplete="email" class="w-full pl-10 pr-3 py-2 bg-surface-container-lowest border border-outline-variant rounded text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="email" name="email" placeholder="citizen@example.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-unit">
+<label class="block font-label-caps text-label-caps text-on-surface-variant uppercase" for="password">Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</div>
+<input autocomplete="current-password" class="w-full pl-10 pr-3 py-2 bg-surface-container-lowest border border-outline-variant rounded text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Meta Options -->
+<div class="flex items-center justify-between pt-unit">
+<div class="flex items-center">
+<input class="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary bg-surface-container-lowest" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block font-body-sm text-body-sm text-on-surface-variant" for="remember-me">
+                        Remember me
+                    </label>
+</div>
+<div class="text-sm">
+<a class="font-body-sm text-body-sm text-primary hover:text-primary-fixed-dim transition-colors" href="#">
+                        Forgot Password?
+                    </a>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="pt-stack-xs">
+<button class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded bg-primary font-label-caps text-label-caps text-on-primary hover:bg-on-primary-fixed-variant focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors uppercase shadow-sm" type="submit">
+                    Sign In
+                </button>
+</div>
+</form>
+<!-- Divider -->
+<div class="mt-stack-lg mb-stack-md relative">
+<div aria-hidden="true" class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant"></div>
+</div>
+<div class="relative flex justify-center">
+<span class="px-2 bg-surface-container-lowest font-body-sm text-body-sm text-outline">Or continue with</span>
+</div>
+</div>
+<!-- Secondary Action -->
+<div>
+<button class="w-full flex items-center justify-center py-2.5 px-4 border border-outline-variant rounded bg-surface-container-lowest font-label-caps text-label-caps text-on-surface hover:bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-outline-variant transition-colors uppercase" type="button">
+<svg class="w-4 h-4 mr-2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                Sign in with Google
+            </button>
+</div>
+<!-- Footer Link -->
+<div class="mt-stack-lg text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Don't have an account? 
+                <a class="font-body-sm text-body-sm text-primary hover:text-primary-fixed-dim font-medium transition-colors" href="#">
+                    Register here
+                </a>
+</p>
+</div>
+</main>
+</body></html>

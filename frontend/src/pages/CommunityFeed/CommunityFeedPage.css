@@ -1,0 +1,276 @@
+.feed-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Left Panel Filters */
+.filters-aside {
+  width: 200px;
+  flex-shrink: 0;
+  background-color: white;
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.filter-section {
+  margin-bottom: 24px;
+}
+
+.filter-section h3 {
+  font-family: var(--font-label-caps);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--on-surface);
+}
+
+.filter-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
+
+/* Center Feed */
+.feed-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.feed-count {
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+
+.sort-select {
+  padding: 4px 12px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Feed Card */
+.feed-card {
+  background-color: white;
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.meta-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.issue-id {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+
+.category-tag {
+  background-color: var(--surface-container-high);
+  color: var(--on-surface);
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.card-time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--on-surface-variant);
+}
+
+.card-title {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin-bottom: 8px;
+}
+
+.card-description {
+  font-size: 16px;
+  color: var(--on-surface-variant);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--outline-variant);
+  margin-bottom: 16px;
+}
+
+.card-author {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+
+.social-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--on-surface-variant);
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.social-btn:hover {
+  color: var(--primary);
+}
+
+.social-btn.active {
+  color: var(--primary);
+}
+
+.card-support {
+  border-top: 1px solid var(--outline-variant);
+  padding-top: 8px;
+}
+
+.support-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+/* Right Panel */
+.feed-aside-right {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.aside-card {
+  background-color: white;
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.aside-card h2 {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--on-surface);
+  border-bottom: 1px solid var(--outline-variant);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.petition-item {
+  border: 1px solid var(--outline-variant);
+  padding: 12px;
+  border-radius: 2px;
+}
+
+.petition-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.petition-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  margin-bottom: 4px;
+}
+
+.trending-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trending-tag {
+  background-color: var(--surface-container);
+  color: var(--on-surface);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--outline-variant);
+  transition: background-color 0.2s;
+}
+
+.trending-tag:hover {
+  background-color: var(--surface-container-high);
+}

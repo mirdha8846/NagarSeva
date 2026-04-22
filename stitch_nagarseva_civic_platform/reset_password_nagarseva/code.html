@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Forgot Password - NagarSeva</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Public+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#eff4ff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#1d4ed8",
+                      "inverse-primary": "#b7c4ff",
+                      "primary-fixed-dim": "#b7c4ff",
+                      "on-tertiary-container": "#76eab6",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "on-surface": "#0d1c2e",
+                      "on-surface-variant": "#434655",
+                      "inverse-surface": "#233144",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-bright": "#f8f9ff",
+                      "on-secondary-fixed": "#131b2e",
+                      "secondary-fixed": "#dae2fd",
+                      "background": "#f8f9ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#ccdbf3",
+                      "on-primary-fixed-variant": "#0039b5",
+                      "on-secondary-container": "#5c647a",
+                      "surface-variant": "#d5e3fc",
+                      "surface-container-highest": "#d5e3fc",
+                      "primary": "#0037b0",
+                      "on-tertiary-fixed": "#002114",
+                      "surface": "#f8f9ff",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "outline-variant": "#c4c5d7",
+                      "surface-tint": "#2151da",
+                      "tertiary-fixed": "#85f8c4",
+                      "on-primary-container": "#cad3ff",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "secondary-container": "#dae2fd",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#e6eeff",
+                      "secondary": "#565e74",
+                      "tertiary-container": "#006948",
+                      "on-primary-fixed": "#001551",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#dce1ff",
+                      "on-background": "#0d1c2e",
+                      "outline": "#747686",
+                      "surface-container-high": "#dce9ff",
+                      "tertiary": "#004f35",
+                      "error": "#ba1a1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-xl": "48px",
+                      "stack-lg": "24px",
+                      "stack-xs": "4px",
+                      "unit": "4px",
+                      "stack-sm": "8px",
+                      "margin-page": "40px",
+                      "stack-md": "16px",
+                      "gutter": "24px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Public Sans"
+                      ],
+                      "data-mono": [
+                              "JetBrains Mono"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "headline-xl": [
+                              "Public Sans"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-surface-container-low text-on-surface antialiased min-h-screen flex flex-col items-center justify-center p-6">
+<!-- Brand Anchor -->
+<div class="mb-stack-lg text-center">
+<span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">NagarSeva</span>
+</div>
+<!-- Recovery Card -->
+<main class="w-full max-w-[440px] bg-surface border border-outline-variant rounded-xl shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),0_2px_4px_-2px_rgba(15,23,42,0.05)] overflow-hidden">
+<!-- Header Section -->
+<div class="p-8 pb-6 text-center border-b border-surface-variant">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-2">Reset Password</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Enter your registered email address. We will send you instructions to securely reset your password.</p>
+</div>
+<!-- Form & Messaging Section -->
+<div class="p-8 pt-6 flex flex-col gap-stack-lg">
+<!-- Success State Banner (Demonstrating the post-action state as requested) -->
+<div class="bg-tertiary-fixed border border-tertiary-fixed-dim rounded-lg p-4 flex gap-3 items-start">
+<span class="material-symbols-outlined text-tertiary mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex flex-col gap-1">
+<span class="font-data-mono text-data-mono text-on-tertiary-fixed font-semibold tracking-tight">RECOVERY LINK DISPATCHED</span>
+<span class="font-body-sm text-body-sm text-on-tertiary-fixed-variant leading-snug">If an account matches the provided address, a secure link has been sent to your inbox. It will expire in 15 minutes.</span>
+</div>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-stack-md">
+<!-- Input Field -->
+<div class="flex flex-col gap-stack-xs">
+<label class="font-label-caps text-label-caps text-on-surface uppercase tracking-wider" for="email_input">Registered Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">mail</span>
+<input class="w-full h-11 pl-10 pr-4 bg-surface-bright border border-outline rounded-lg text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" id="email_input" placeholder="citizen@example.gov.uk" required="" type="email"/>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="mt-2 w-full h-11 bg-primary text-on-primary font-label-caps text-label-caps rounded-lg hover:bg-surface-tint focus:ring-2 focus:ring-primary-light focus:outline-none transition-colors flex items-center justify-center gap-2" type="button">
+                    Send Recovery Link
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- Navigation Back -->
+<div class="pt-4 mt-2 border-t border-surface-variant text-center">
+<a class="inline-flex items-center gap-2 font-body-sm text-body-sm text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">keyboard_backspace</span>
+                    Return to Login
+                </a>
+</div>
+</div>
+</main>
+<!-- Footer Trust Anchor -->
+<div class="mt-stack-lg text-center">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-widest flex items-center justify-center gap-1 opacity-70">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+            Secure Civic Portal
+        </span>
+</div>
+</body></html>

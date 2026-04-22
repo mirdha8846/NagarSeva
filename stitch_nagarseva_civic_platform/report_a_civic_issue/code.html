@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NagarSeva - Report Issue</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&amp;family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#cad3ff",
+                        "on-primary-fixed": "#001551",
+                        "background": "#f8f9ff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "primary": "#0037b0",
+                        "on-surface-variant": "#434655",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "surface-container-highest": "#d5e3fc",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#2151da",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#1d4ed8",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#006948",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#76eab6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#0d1c2e",
+                        "surface-container": "#e6eeff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#0039b5",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "tertiary": "#004f35",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "outline-variant": "#c4c5d7",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "inverse-surface": "#233144",
+                        "inverse-primary": "#b7c4ff",
+                        "primary-fixed": "#dce1ff",
+                        "surface-dim": "#ccdbf3",
+                        "outline": "#747686",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-container": "#5c647a",
+                        "surface-variant": "#d5e3fc",
+                        "tertiary-fixed": "#85f8c4",
+                        "secondary": "#565e74",
+                        "secondary-fixed": "#dae2fd",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-tertiary-fixed": "#002114",
+                        "on-background": "#0d1c2e",
+                        "surface-container-high": "#dce9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-xl": "48px",
+                        "unit": "4px",
+                        "margin-page": "40px",
+                        "stack-xs": "4px",
+                        "container-max": "1280px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px",
+                        "gutter": "24px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Public Sans"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Public Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Public Sans"],
+                        "label-caps": ["Inter"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md">
+<!-- SideNavBar (Suppressed as this is a focused task) -->
+<!-- TopNavBar (Suppressed as this is a focused task) -->
+<main class="flex-1 w-full max-w-[1280px] mx-auto p-margin-page">
+<header class="mb-stack-xl flex items-center justify-between">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-on-background">Report an Issue</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-stack-sm">Provide details to help us resolve the civic problem.</p>
+</div>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-on-background transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+<span class="font-label-caps text-label-caps">CANCEL</span>
+</button>
+</header>
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Left Column: Form (55%) -->
+<div class="lg:w-[55%] flex flex-col gap-stack-lg">
+<!-- Stepper -->
+<div class="flex items-center justify-between relative px-4">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[2px] bg-outline-variant -z-10"></div>
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-1/3 h-[2px] bg-primary -z-10"></div>
+<div class="flex flex-col items-center gap-2 bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-body-sm text-body-sm font-semibold">1</div>
+<span class="font-label-caps text-label-caps text-primary">Details</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-background px-2">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant bg-surface text-on-surface-variant flex items-center justify-center font-body-sm text-body-sm font-semibold">2</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Location</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-background px-2">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant bg-surface text-on-surface-variant flex items-center justify-center font-body-sm text-body-sm font-semibold">3</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Review</span>
+</div>
+</div>
+<!-- Step 1 Content -->
+<div class="bg-surface border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-stack-lg shadow-sm">
+<!-- Upload Zone -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-stack-xs">EVIDENCE (OPTIONAL)</label>
+<div class="h-[160px] border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-outline text-3xl mb-2" data-icon="cloud_upload">cloud_upload</span>
+<span class="font-body-sm text-body-sm text-on-surface">Click to upload or drag and drop</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-xs mt-1">SVG, PNG, JPG or GIF (max. 800x400px)</span>
+</div>
+</div>
+<!-- Title -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-stack-xs">TITLE</label>
+<input class="w-full border border-outline-variant rounded-DEFAULT px-4 py-2 bg-surface font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="e.g. Large pothole on Main St." type="text"/>
+</div>
+<!-- Category Grid -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-stack-xs">CATEGORY</label>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-stack-md">
+<button class="border border-outline-variant rounded-DEFAULT p-4 flex flex-col items-center gap-2 bg-surface hover:border-primary hover:bg-surface-container-low transition-colors text-on-surface">
+<span class="material-symbols-outlined text-2xl" data-icon="pothole">road</span>
+<span class="font-body-sm text-body-sm">Pothole</span>
+</button>
+<button class="border border-outline-variant rounded-DEFAULT p-4 flex flex-col items-center gap-2 bg-surface hover:border-primary hover:bg-surface-container-low transition-colors text-on-surface">
+<span class="material-symbols-outlined text-2xl" data-icon="delete">delete</span>
+<span class="font-body-sm text-body-sm">Garbage</span>
+</button>
+<button class="border border-outline-variant rounded-DEFAULT p-4 flex flex-col items-center gap-2 bg-surface hover:border-primary hover:bg-surface-container-low transition-colors text-on-surface">
+<span class="material-symbols-outlined text-2xl" data-icon="lightbulb">lightbulb</span>
+<span class="font-body-sm text-body-sm">Streetlight</span>
+</button>
+<button class="border border-outline-variant rounded-DEFAULT p-4 flex flex-col items-center gap-2 bg-surface hover:border-primary hover:bg-surface-container-low transition-colors text-on-surface">
+<span class="material-symbols-outlined text-2xl" data-icon="water_drop">water_drop</span>
+<span class="font-body-sm text-body-sm">Drainage</span>
+</button>
+<button class="border border-outline-variant rounded-DEFAULT p-4 flex flex-col items-center gap-2 bg-surface hover:border-primary hover:bg-surface-container-low transition-colors text-on-surface">
+<span class="material-symbols-outlined text-2xl" data-icon="park">park</span>
+<span class="font-body-sm text-body-sm">Parks</span>
+</button>
+<button class="border border-outline-variant rounded-DEFAULT p-4 flex flex-col items-center gap-2 bg-surface hover:border-primary hover:bg-surface-container-low transition-colors text-on-surface">
+<span class="material-symbols-outlined text-2xl" data-icon="warning">warning</span>
+<span class="font-body-sm text-body-sm">Road Damage</span>
+</button>
+</div>
+</div>
+<!-- Priority -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-stack-xs">PRIORITY LEVEL</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-stack-sm">
+<button class="border border-outline-variant rounded-DEFAULT py-2 px-3 text-center bg-surface hover:border-primary font-body-sm text-body-sm text-on-surface transition-colors">Low</button>
+<button class="border border-outline-variant rounded-DEFAULT py-2 px-3 text-center bg-surface hover:border-primary font-body-sm text-body-sm text-on-surface transition-colors">Medium</button>
+<button class="border border-primary bg-primary-fixed text-on-primary-fixed rounded-DEFAULT py-2 px-3 text-center font-body-sm text-body-sm font-medium transition-colors">High</button>
+<button class="border border-outline-variant rounded-DEFAULT py-2 px-3 text-center bg-surface hover:border-primary font-body-sm text-body-sm text-error transition-colors">Urgent</button>
+</div>
+</div>
+<!-- Description -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-stack-xs">DESCRIPTION</label>
+<textarea class="w-full border border-outline-variant rounded-DEFAULT px-4 py-2 bg-surface font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none" placeholder="Provide more details about the issue..." rows="4"></textarea>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex justify-end gap-stack-md mt-stack-md">
+<button class="px-6 py-3 border border-outline-variant rounded-DEFAULT font-body-md text-body-md font-semibold text-on-surface hover:bg-surface-container-low transition-colors">Save Draft</button>
+<button class="px-6 py-3 bg-primary text-on-primary rounded-DEFAULT font-body-md text-body-md font-semibold hover:bg-primary-container transition-colors flex items-center gap-2">
+                        Next Step
+                        <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Right Column: Live Preview (45%) -->
+<div class="lg:w-[45%]">
+<div class="sticky top-stack-xl bg-surface-container border border-outline-variant rounded-xl p-stack-lg shadow-md flex flex-col gap-stack-md">
+<div class="flex items-center justify-between border-b border-outline-variant pb-stack-sm">
+<h3 class="font-headline-md text-headline-md text-on-background">Preview</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">How it will appear</span>
+</div>
+<div class="bg-surface rounded-lg p-stack-md border border-outline-variant flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-1 rounded-sm font-label-caps text-label-caps">Pending Submission</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs">ID: --</span>
+</div>
+<h4 class="font-headline-lg text-headline-lg text-on-surface mt-stack-xs leading-tight">Waiting for details...</h4>
+<div class="flex items-center gap-2 text-on-surface-variant mt-stack-xs">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+<span class="font-body-sm text-body-sm">Location pending</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-stack-sm min-h-[60px] opacity-60">Description will appear here once entered.</p>
+<div class="flex items-center justify-between border-t border-outline-variant pt-stack-sm mt-stack-sm">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-xs text-on-surface-variant" data-icon="person">person</span>
+</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Anonymous</span>
+</div>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs">Today</span>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant border-dashed rounded-lg p-stack-md flex items-center justify-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="image">image</span>
+<span class="font-body-sm text-body-sm">No evidence uploaded yet</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

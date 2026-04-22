@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up - NagarSeva</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1d4ed8",
+                        "inverse-primary": "#b7c4ff",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "on-tertiary-container": "#76eab6",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "on-surface": "#0d1c2e",
+                        "on-surface-variant": "#434655",
+                        "inverse-surface": "#233144",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#131b2e",
+                        "secondary-fixed": "#dae2fd",
+                        "background": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#ccdbf3",
+                        "on-primary-fixed-variant": "#0039b5",
+                        "on-secondary-container": "#5c647a",
+                        "surface-variant": "#d5e3fc",
+                        "surface-container-highest": "#d5e3fc",
+                        "primary": "#0037b0",
+                        "on-tertiary-fixed": "#002114",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "outline-variant": "#c4c5d7",
+                        "surface-tint": "#2151da",
+                        "tertiary-fixed": "#85f8c4",
+                        "on-primary-container": "#cad3ff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "secondary-container": "#dae2fd",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#e6eeff",
+                        "secondary": "#565e74",
+                        "tertiary-container": "#006948",
+                        "on-primary-fixed": "#001551",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#dce1ff",
+                        "on-background": "#0d1c2e",
+                        "outline": "#747686",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary": "#004f35",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-xl": "48px",
+                        "stack-lg": "24px",
+                        "stack-xs": "4px",
+                        "unit": "4px",
+                        "stack-sm": "8px",
+                        "margin-page": "40px",
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Public Sans"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Public Sans"],
+                        "headline-xl": ["Public Sans"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-container-low min-h-screen flex flex-col font-body-md text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="bg-white dark:bg-slate-950 font-public-sans antialiased text-sm font-medium docked full-width top-0 border-b border-slate-200 dark:border-slate-800 flat no shadows flex justify-between items-center h-16 w-full px-6 max-w-[1280px] mx-auto shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance">account_balance</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">CivicPortal</span>
+</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors py-2 px-3 rounded" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors py-2 px-3 rounded" href="#">Services</a>
+<a class="text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors py-2 px-3 rounded" href="#">Reports</a>
+</nav>
+<div class="flex items-center">
+<button class="text-blue-700 dark:text-blue-500 font-semibold hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors py-2 px-4 rounded-DEFAULT">Help</button>
+</div>
+</header>
+<!-- Main Canvas - Registration Form -->
+<main class="flex-grow flex items-center justify-center p-margin-page">
+<div class="w-full max-w-md bg-surface border border-outline-variant rounded-xl shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),0_2px_4px_-2px_rgba(15,23,42,0.05)] overflow-hidden">
+<div class="p-8">
+<div class="mb-8 text-center">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Create Account</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Register to access digital civic services.</p>
+</div>
+<form class="space-y-6">
+<!-- Full Name -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-unit" for="fullName">FULL NAME</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-DEFAULT py-2 px-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="fullName" placeholder="e.g. Jane Doe" type="text"/>
+</div>
+<!-- Ward Number/Location -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-unit" for="wardNumber">WARD NUMBER / LOCATION</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]" data-icon="location_on">location_on</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-DEFAULT py-2 pl-10 pr-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="wardNumber" placeholder="Enter ward or area" type="text"/>
+</div>
+</div>
+<!-- Email -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-unit" for="email">EMAIL ADDRESS</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-DEFAULT py-2 px-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="email" placeholder="name@example.com" type="email"/>
+</div>
+<!-- Mobile Number & OTP Placeholder -->
+<div class="space-y-3 border-l-2 border-surface-variant pl-4">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-unit" for="mobile">MOBILE NUMBER</label>
+<div class="flex gap-2">
+<input class="flex-grow bg-surface-container-lowest border border-outline-variant rounded-DEFAULT py-2 px-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="mobile" placeholder="+91 00000 00000" type="tel"/>
+<button class="bg-surface-variant text-primary font-label-caps text-label-caps px-4 rounded-DEFAULT hover:bg-surface-container-high transition-colors" type="button">SEND OTP</button>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-unit text-on-surface-variant" for="otp">OTP VERIFICATION</label>
+<input class="w-full bg-surface-container-low border border-outline-variant border-dashed rounded-DEFAULT py-2 px-3 font-data-mono text-data-mono text-on-surface-variant text-center opacity-70" disabled="" id="otp" placeholder="- - - - - -" type="text"/>
+</div>
+</div>
+<!-- Password -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface mb-unit" for="password">PASSWORD</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-DEFAULT py-2 px-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility_off">visibility_off</span>
+</button>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface-variant mt-1">Must be at least 8 characters long.</p>
+</div>
+<!-- Terms -->
+<div class="flex items-start gap-2 pt-2">
+<input class="mt-1 border-outline-variant rounded text-primary focus:ring-primary" id="terms" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-on-surface-variant" for="terms">
+                            I agree to the <a class="text-primary hover:underline" href="#">Terms of Service</a> and <a class="text-primary hover:underline" href="#">Privacy Policy</a>.
+                        </label>
+</div>
+<!-- Actions -->
+<div class="pt-4">
+<button class="w-full bg-primary text-on-primary font-headline-md text-[16px] font-semibold py-3 rounded-DEFAULT hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" type="submit">Create Account</button>
+<p class="text-center font-body-sm text-body-sm text-on-surface-variant mt-4">
+                            Already registered? <a class="text-primary font-medium hover:underline" href="#">Sign in instead</a>
+</p>
+</div>
+</form>
+</div>
+<!-- Bottom decorative bar indicating secure connection -->
+<div class="bg-surface-container py-3 px-8 flex items-center justify-center gap-2 border-t border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="lock" data-weight="fill">lock</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Secure Civic Network Registration</span>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-900 font-public-sans text-xs uppercase tracking-wider docked full-width bottom-0 border-t border-slate-200 dark:border-slate-800 flat no shadows flex flex-col md:flex-row justify-between items-center py-8 px-6 w-full max-w-[1280px] mx-auto gap-4 shrink-0">
+<div class="text-slate-500 dark:text-slate-400">© 2024 Civic Engagement Platform. Built for public transparency.</div>
+<nav class="flex gap-4">
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 Transition-all duration-200" href="#">Privacy Policy</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 Transition-all duration-200" href="#">Terms of Service</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 Transition-all duration-200" href="#">Accessibility Statement</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 Transition-all duration-200" href="#">Cookie Policy</a>
+</nav>
+</footer>
+</body></html>

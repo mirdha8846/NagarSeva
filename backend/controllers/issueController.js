@@ -1,0 +1,107 @@
+const Issue = require('../models/Issue');
+
+// @desc    Create a new issue
+// @route   POST /api/issues
+// @access  Private (Citizen)
+const createIssue = async (req, res) => {
+  const { title, description, category, longitude, latitude } = req.body;
+
+  const images = req.files ? req.files.map(file => `uploads/${file.filename}`) : [];
+
+  const issue = new Issue({
+    title,
+    description,
+    category,
+    images,
+    location: {
+      type: 'Point',
+      coordinates: [parseFloat(longitude), parseFloat(latitude)]
+    },
+    userId: req.user._id
+  });
+
+  const createdIssue = await issue.save();
+  res.status(201).json(createdIssue);
+};
+
+// @desc    Get all issues (can filter by location)
+// @route   GET /api/issues
+// @access  Public
+const getIssues = async (req, res) => {
+  const { lng, lat, dist, category, search, limit, userId } = req.query;
+
+  let query = {};
+  
+  if (userId) {
+    query.userId = userId;
+  }
+
+  if (lng && lat) {
+    query.location = {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates: [parseFloat(lng), parseFloat(lat)]
+        },
+        $maxDistance: parseFloat(dist) || 5000 // default 5km
+      }
+    };
+  }
+
+  if (category && category !== 'All') {
+    query.category = category;
+  }
+
+  if (search) {
+    query.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { description: { $regex: search, $options: 'i' } }
+    ];
+  }
+
+  const issuesQuery = Issue.find(query).populate('userId', 'name').sort({ createdAt: -1 });
+  
+  if (limit) {
+    issuesQuery.limit(parseInt(limit));
+  }
+
+  const issues = await issuesQuery;
+  const total = await Issue.countDocuments(query);
+
+  res.json({
+    issues,
+    total,
+    count: issues.length
+  });
+};
+
+// @desc    Get issue by ID
+// @route   GET /api/issues/:id
+// @access  Public
+const getIssueById = async (req, res) => {
+  const issue = await Issue.findById(req.params.id).populate('userId', 'name');
+
+  if (issue) {
+    res.json(issue);
+  } else {
+    res.status(404).json({ message: 'Issue not found' });
+  }
+};
+
+// @desc    Update issue status
+// @route   PATCH /api/issues/:id/status
+// @access  Private (Admin/Authority)
+const updateIssueStatus = async (req, res) => {
+  const { status } = req.body;
+  const issue = await Issue.findById(req.params.id);
+
+  if (issue) {
+    issue.status = status;
+    const updatedIssue = await issue.save();
+    res.json(updatedIssue);
+  } else {
+    res.status(404).json({ message: 'Issue not found' });
+  }
+};
+
+module.exports = { createIssue, getIssues, getIssueById, updateIssueStatus };

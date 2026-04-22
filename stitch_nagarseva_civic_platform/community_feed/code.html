@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NagarSeva - Community Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;900&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#cad3ff",
+                        "on-primary-fixed": "#001551",
+                        "background": "#f8f9ff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "primary": "#0037b0",
+                        "on-surface-variant": "#434655",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "surface-container-highest": "#d5e3fc",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#2151da",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#1d4ed8",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#006948",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#76eab6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#0d1c2e",
+                        "surface-container": "#e6eeff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#0039b5",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "tertiary": "#004f35",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "outline-variant": "#c4c5d7",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "inverse-surface": "#233144",
+                        "inverse-primary": "#b7c4ff",
+                        "primary-fixed": "#dce1ff",
+                        "surface-dim": "#ccdbf3",
+                        "outline": "#747686",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-container": "#5c647a",
+                        "surface-variant": "#d5e3fc",
+                        "tertiary-fixed": "#85f8c4",
+                        "secondary": "#565e74",
+                        "secondary-fixed": "#dae2fd",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-tertiary-fixed": "#002114",
+                        "on-background": "#0d1c2e",
+                        "surface-container-high": "#dce9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-xl": "48px",
+                        "unit": "4px",
+                        "margin-page": "40px",
+                        "stack-xs": "4px",
+                        "container-max": "1280px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px",
+                        "gutter": "24px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Public Sans"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Public Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Public Sans"],
+                        "label-caps": ["Inter"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-2 text-on-surface font-body-md h-screen overflow-hidden flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-white dark:bg-slate-900 font-['Public_Sans'] antialiased tracking-tight docked full-width top-0 h-[60px] border-b border-slate-200 dark:border-slate-800 flat no shadows fixed top-0 right-0 z-40 flex justify-between items-center px-6 w-[calc(100%-280px)]">
+<div class="flex items-center gap-gutter">
+<!-- Search left placeholder -->
+</div>
+<div class="flex items-center gap-stack-md">
+<nav class="hidden md:flex gap-stack-lg">
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">Ward 42, Pune</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">English | हिंदी</a>
+</nav>
+<div class="flex items-center gap-stack-sm">
+<button class="p-2 text-on-surface hover:bg-surface-container rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="Close up portrait of a professional man with a neutral expression against a plain background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBSi8CwgEFc26B4DnkRw6IadsytvoZTdwqCO16a2pr2oFT-2oZipuOqxWYIFaM3b6gvzNZc5qoEzo7k_wNjcPuX57oa4H8PtfTx8Uk29vBKszf4Ci3bGO7sri9L0q3GEugMuAihuzicpPBaxsHQAKXk_GofdgTukwuWzOeAWjey5ysxZhTR2x8p8dIqhL_9Rai_VZLyJPovEqgGprKmjkQCVgFcBfZUEjOd6Bcg8Ls9yjRgHGPV4_vJuLtnWyNZDA559iilbZLWYg"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 pt-[60px]">
+<!-- SideNavBar -->
+<aside class="bg-[#0F172A] font-['Public_Sans'] text-sm fixed left-0 top-0 h-full w-[280px] border-r border-slate-800 flat no shadows flex flex-col h-full py-6 z-50">
+<div class="px-6 mb-stack-xl">
+<div class="flex items-center gap-3 mb-2">
+<img alt="NagarSeva Logo" class="w-8 h-8 rounded-lg object-cover" data-alt="Abstract geometric logo mark with interlocking blue and teal shapes on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2qR8ekcDtnFUVvooPi9Krz8fWBfX1BHV-T8NIATfIAiL2o4kpZc_qqQe_JOJCABdiuKVaDHsh58XzFPyWKlJLuuH7zo6xhJAt8HWNPPdrIDU33MWqDDAp_ivitHCKfoqAZjpSPSN0pYQWtaDmJF8A1vmi2heR6Dl6hvEAPlV8q6rsIYMttN1JTlOCqMzotcG3NNWXXxG9N7HWeEao92MYLTJYF-7RdjFPtd8ImNdYSfua0Fj9BD2ZG94clYDCrDSna0w3-Xxqn6c"/>
+<h1 class="text-white font-bold text-lg">NagarSeva</h1>
+</div>
+<p class="text-slate-400 text-xs">Ward 42, Pune</p>
+</div>
+<nav class="flex-1 flex flex-col">
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="bg-blue-600/10 text-white border-l-4 border-blue-600 py-3 px-4 font-semibold hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                    Community
+                </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+                    Grievances
+                </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+                    Government
+                </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+                    Analytics
+                </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</nav>
+<div class="mt-auto px-4 flex flex-col gap-2">
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                    Help &amp; Support
+                </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 hover:bg-slate-800/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Logout
+                </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[280px] h-full overflow-y-auto bg-surface-2 p-margin-page">
+<div class="max-w-[1280px] mx-auto flex gap-gutter items-start">
+<!-- Left Filters Panel -->
+<aside class="w-[200px] flex-shrink-0 bg-surface border border-outline-variant p-stack-md rounded">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md border-b border-outline-variant pb-stack-sm">Filters</h2>
+<div class="space-y-stack-lg">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-stack-xs block">STATUS</label>
+<div class="space-y-2">
+<label class="flex items-center gap-2"><input class="rounded border-outline text-primary focus:ring-primary" type="checkbox"/> Open</label>
+<label class="flex items-center gap-2"><input class="rounded border-outline text-primary focus:ring-primary" type="checkbox"/> In Progress</label>
+<label class="flex items-center gap-2"><input class="rounded border-outline text-primary focus:ring-primary" type="checkbox"/> Resolved</label>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-stack-xs block">CATEGORY</label>
+<select class="w-full border-outline-variant rounded bg-surface text-body-sm focus:border-primary focus:ring-primary p-2">
+<option>All Categories</option>
+<option>Infrastructure</option>
+<option>Sanitation</option>
+</select>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-stack-xs block">TIME</label>
+<select class="w-full border-outline-variant rounded bg-surface text-body-sm focus:border-primary focus:ring-primary p-2">
+<option>Last 7 Days</option>
+<option>Last 30 Days</option>
+<option>All Time</option>
+</select>
+</div>
+<button class="w-full bg-primary text-on-primary font-body-md py-2 rounded border border-primary hover:bg-primary-container transition-colors shadow-sm">
+                            Apply Filters
+                        </button>
+</div>
+</aside>
+<!-- Center Feed -->
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-stack-md">
+<span class="font-body-sm text-on-surface-variant">Showing 1,247 issues</span>
+<select class="border-outline-variant rounded bg-surface text-body-sm focus:border-primary focus:ring-primary py-1 px-3">
+<option>Sort: Most Relevant</option>
+<option>Recent</option>
+<option>Most Supported</option>
+</select>
+</div>
+<div class="space-y-stack-md">
+<!-- Card 1 -->
+<article class="bg-surface border border-outline-variant rounded p-stack-md shadow-sm">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<span class="font-data-mono text-data-mono text-on-surface-variant">#IVS-2847</span>
+<span class="bg-surface-container-high text-on-surface px-2 py-1 rounded-sm text-xs font-medium">Infrastructure</span>
+</div>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs">2h ago</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-xs">Deep pothole on FC Road causing traffic delays</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">Large pothole developed after recent rains near Goodluck Cafe. Needs immediate filling before further road damage.</p>
+<img alt="Pothole" class="w-full h-48 object-cover rounded border border-outline-variant mb-stack-md" data-alt="Close up of a deep, rugged pothole on a cracked asphalt road during daytime" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRTSSyo4G_mS5Rvkprenmx9Ozw1gQtwj5Sa39CBeJQzJi-AmK0UK3YD3bCqZqOIOD_StoBV7Qxtr3z_PWzZ3YtK9-ufOtq6o4bNWLUOVsxe4cv9wZQRqykuwirEQdeLWKTi8b245Yz17xEpnYW0hKi3SOcR8F5DsVLb8dY7PYAKlcE5ZDWq2cnAvvhzG-bPbnlc-pMSKBtkIU-l-WGg1nwGNxFmSutvyL4Guz0sR32KQfTDhy4hxiRY7UAeg4-pdjAJ0Wz9RzP_g4"/>
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex items-center gap-2 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-base">person</span>
+<span>@rahul_k</span>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-base">thumb_up</span> 142
+                                    </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-base">thumb_down</span> 3
+                                    </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-base">chat_bubble</span> 12
+                                    </button>
+</div>
+</div>
+<div class="border-t border-outline-variant pt-stack-sm">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-medium">Community Support</span>
+<span>87%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+<div class="bg-tertiary-container h-full" style="width: 87%"></div>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface border border-outline-variant rounded p-stack-md shadow-sm">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<span class="font-data-mono text-data-mono text-on-surface-variant">#SAN-9102</span>
+<span class="bg-surface-container-high text-on-surface px-2 py-1 rounded-sm text-xs font-medium">Sanitation</span>
+</div>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs">5h ago</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-xs">Garbage not collected for 3 days in Lane 4</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">Bins are overflowing and causing severe hygiene issues. Requesting urgent pickup.</p>
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex items-center gap-2 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-base">person</span>
+<span>@priya_s</span>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-base">thumb_up</span> 89
+                                    </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-base">thumb_down</span> 1
+                                    </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-base">chat_bubble</span> 5
+                                    </button>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- Right Panel -->
+<aside class="w-[280px] flex-shrink-0 flex flex-col gap-stack-lg">
+<!-- Petitions -->
+<div class="bg-surface border border-outline-variant p-stack-md rounded">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md border-b border-outline-variant pb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container text-base">local_fire_department</span> Active Petitions
+                        </h2>
+<div class="space-y-stack-md">
+<div class="border border-outline-variant p-3 rounded-sm">
+<h4 class="font-body-sm font-semibold text-on-surface mb-2">Fix all potholes on FC Road</h4>
+<div class="mb-3">
+<div class="flex justify-between text-[10px] mb-1 font-data-mono">
+<span>SIGNATURES</span>
+<span>4,500 / 5,000</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full" style="width: 90%"></div>
+</div>
+</div>
+<button class="w-full border border-primary text-primary font-body-sm py-1.5 rounded hover:bg-surface-container transition-colors">
+                                    Sign Petition
+                                </button>
+</div>
+</div>
+</div>
+<!-- Trending Tags -->
+<div class="bg-surface border border-outline-variant p-stack-md rounded">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md border-b border-outline-variant pb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-base">tag</span> Trending
+                        </h2>
+<div class="flex flex-wrap gap-2">
+<a class="bg-surface-container text-on-surface px-2 py-1 rounded text-xs font-medium border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">#Pothole</a>
+<a class="bg-surface-container text-on-surface px-2 py-1 rounded text-xs font-medium border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">#PMC</a>
+<a class="bg-surface-container text-on-surface px-2 py-1 rounded text-xs font-medium border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">#WaterSupply</a>
+<a class="bg-surface-container text-on-surface px-2 py-1 rounded text-xs font-medium border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">#StreetLights</a>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NagarSeva Dashboard - Ward 42</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Public+Sans:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#cad3ff",
+                        "on-primary-fixed": "#001551",
+                        "background": "#f8f9ff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "primary": "#0037b0",
+                        "on-surface-variant": "#434655",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "surface-container-highest": "#d5e3fc",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#2151da",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#1d4ed8",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#006948",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#76eab6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#0d1c2e",
+                        "surface-container": "#e6eeff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#0039b5",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "tertiary": "#004f35",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "outline-variant": "#c4c5d7",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "inverse-surface": "#233144",
+                        "inverse-primary": "#b7c4ff",
+                        "primary-fixed": "#dce1ff",
+                        "surface-dim": "#ccdbf3",
+                        "outline": "#747686",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-container": "#5c647a",
+                        "surface-variant": "#d5e3fc",
+                        "tertiary-fixed": "#85f8c4",
+                        "secondary": "#565e74",
+                        "secondary-fixed": "#dae2fd",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-tertiary-fixed": "#002114",
+                        "on-background": "#0d1c2e",
+                        "surface-container-high": "#dce9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-xl": "48px",
+                        "unit": "4px",
+                        "margin-page": "40px",
+                        "stack-xs": "4px",
+                        "container-max": "1280px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px",
+                        "gutter": "24px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Public Sans"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Public Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Public Sans"],
+                        "label-caps": ["Inter"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-bright text-on-surface font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar (Semantic Map: "Dashboard" is active) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] border-r border-slate-800 bg-[#0F172A] flex flex-col py-6 z-50 hidden md:flex">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">N</div>
+<div>
+<h1 class="text-white font-bold text-lg font-['Public_Sans']">NagarSeva</h1>
+<p class="text-slate-400 text-xs">Ward 42, Pune</p>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<!-- Active Tab -->
+<a class="bg-blue-600/10 text-white border-l-4 border-blue-600 py-3 px-4 font-semibold flex items-center gap-3 rounded-r-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 rounded-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">groups</span>
+                Community
+            </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 rounded-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">campaign</span>
+                Grievances
+            </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 rounded-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+                Government
+            </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 rounded-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+                Analytics
+            </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 rounded-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto px-2 space-y-1">
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 rounded-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">help</span>
+                Help &amp; Support
+            </a>
+<a class="text-slate-400 hover:text-slate-200 py-3 px-4 flex items-center gap-3 rounded-lg font-['Public_Sans'] text-sm hover:bg-slate-800/50 transition-all duration-200 Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-[280px] h-full overflow-hidden bg-surface-bright">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 z-40 flex justify-between items-center px-6 w-full md:w-[calc(100%-280px)] h-[60px] border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-['Public_Sans'] antialiased tracking-tight">
+<div class="flex items-center gap-6">
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden text-slate-600">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex gap-4">
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors Active: opacity-80 duration-150 px-2 py-1 rounded" href="#">Ward 42, Pune</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors Active: opacity-80 duration-150 px-2 py-1 rounded" href="#">English | हिंदी</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-slate-200" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANav_ojuZlGuGVtMWnXF7VLlvKTC24GhNI7ayKl87OjEYVSQ5_jqnaQOnTvIbJSGUnx3P2Rjb9yupypI8GqIW2djW5-WwVmH0QKgCix7l6_HTw_GZX630NZeizGy5cLaV37NvWXQyyns9IDfP5JhO8l2V-MMoHr3aZu1xGJyjBpK0IOn5am-yMLqK9QGddWXin4bQCGTJhz8x6aTH0XfoMMaEyfMcLxwgsOoouQQoK5-jrFapP4WPamqtjwM8kABjDacPwGxr0b0o"/>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto mt-[60px] p-margin-page pb-24">
+<div class="max-w-container-max mx-auto space-y-stack-xl">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Good morning, Rahul 👋</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Ward 42 · Kothrud, Pune · Last updated 2 min ago</p>
+</div>
+<div class="flex gap-stack-sm w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-4 py-2 border border-outline text-on-surface-variant rounded-DEFAULT font-body-sm text-body-sm hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary-container focus:outline-none flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Download Report
+                        </button>
+<button class="flex-1 sm:flex-none px-4 py-2 bg-primary text-on-primary rounded-DEFAULT font-body-sm text-body-sm hover:bg-primary-fixed-variant transition-colors focus:ring-2 focus:ring-primary-container focus:outline-none flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Report Issue
+                        </button>
+</div>
+</div>
+<!-- KPI Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-stack-md shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-full bg-[#EFF6FF] flex items-center justify-center text-[#2563EB]">
+<span class="material-symbols-outlined">report</span>
+</div>
+<span class="flex items-center text-[#059669] bg-[#ECFDF5] px-2 py-1 rounded text-xs font-medium">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> 12%
+                            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Total Issues</p>
+<p class="font-data-mono text-data-mono text-2xl font-bold mt-1 text-on-surface">1,247</p>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-stack-md shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-full bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<span class="flex items-center text-[#059669] bg-[#ECFDF5] px-2 py-1 rounded text-xs font-medium">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> 8%
+                            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-1 flex justify-between">
+<span>Resolved</span>
+<span>71%</span>
+</p>
+<div class="w-full bg-surface-container rounded-full h-1.5 mb-2">
+<div class="bg-[#059669] h-1.5 rounded-full" style="width: 71%"></div>
+</div>
+<p class="font-data-mono text-data-mono text-2xl font-bold text-on-surface">891</p>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-stack-md shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-full bg-[#FFFBEB] flex items-center justify-center text-[#D97706]">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">In Progress</p>
+<div class="flex items-end justify-between mt-1">
+<p class="font-data-mono text-data-mono text-2xl font-bold text-on-surface">243</p>
+<p class="text-xs text-on-surface-variant">Avg. response: 3.2 days</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-stack-md shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="w-10 h-10 rounded-full bg-[#F5F3FF] flex items-center justify-center text-[#7C3AED]">
+<span class="material-symbols-outlined">workspace_premium</span>
+</div>
+<span class="text-xs font-medium text-[#7C3AED] bg-[#F5F3FF] px-2 py-1 rounded border border-[#EDE9FE]">Silver Contributor</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Civic Points</p>
+<p class="font-data-mono text-data-mono text-2xl font-bold mt-1 text-on-surface">847 <span class="text-sm font-normal text-on-surface-variant">pts</span></p>
+</div>
+</div>
+<!-- Two Column Layout (Map & Feed) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Map -->
+<div class="lg:col-span-7 bg-surface border border-outline-variant rounded-xl shadow-sm flex flex-col overflow-hidden">
+<div class="p-4 border-b border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-surface">
+<h3 class="font-headline-md text-headline-md text-on-surface">Issue Map — Ward 42</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1 bg-surface-container text-on-surface text-xs font-medium rounded-full border border-outline">All</button>
+<button class="px-3 py-1 bg-surface text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant hover:bg-surface-container transition-colors">Pothole</button>
+<button class="px-3 py-1 bg-surface text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant hover:bg-surface-container transition-colors">Garbage</button>
+<button class="px-3 py-1 bg-surface text-on-surface-variant text-xs font-medium rounded-full border border-outline-variant hover:bg-surface-container transition-colors">Streetlight</button>
+</div>
+</div>
+<div class="flex-1 bg-surface-container-low min-h-[400px] relative">
+<!-- Simulated Map Image -->
+<img alt="Map of Ward 42 Pune" class="w-full h-full object-cover opacity-60 grayscale-[30%]" data-alt="Aerial map view of urban city grid with streets and blocks, soft lighting, slightly desaturated technical aesthetic" data-location="Pune" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFbkrEsNDCq5-MgbN_dkWqKDuv6LMzbMYLB2dgjn0eOSE8RyyIi2nPCQn7Kg57nWWJ15pZUFFnUr1RFIU34y_gsr-Rgp832zyAwmu6TRuz4GRK4tLzfx6LclaWC64crBQWoPkHST9IlJnzVZUugubs1Qrr_C9VOiKCgiJ-0iNNWsjLpf-qKnU8GDh4jAoTyKeg3-CcyVkfS1O2RT9p1NhOKMbAL6CUBrK4OhAOFwEkczthTn80--IjzVqLKbzUqQYQeYLuPsfXvE8"/>
+<!-- Simulated Map Markers -->
+<div class="absolute top-1/4 left-1/3 w-4 h-4 bg-error rounded-full border-2 border-white shadow-sm flex items-center justify-center animate-pulse"></div>
+<div class="absolute top-1/2 left-1/2 w-4 h-4 bg-[#D97706] rounded-full border-2 border-white shadow-sm flex items-center justify-center"></div>
+<div class="absolute bottom-1/3 right-1/4 w-4 h-4 bg-primary rounded-full border-2 border-white shadow-sm flex items-center justify-center"></div>
+<div class="absolute top-1/3 right-1/3 w-4 h-4 bg-[#059669] rounded-full border-2 border-white shadow-sm flex items-center justify-center"></div>
+<!-- Map Legend -->
+<div class="absolute bottom-4 left-4 bg-surface/90 backdrop-blur-sm border border-outline-variant rounded-lg p-3 shadow-sm">
+<div class="flex flex-col gap-2 text-xs text-on-surface-variant font-body-sm">
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-error"></div> Open (Critical)</div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#D97706]"></div> In Progress</div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#059669]"></div> Resolved</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Feed -->
+<div class="lg:col-span-5 bg-surface border border-outline-variant rounded-xl shadow-sm flex flex-col h-full">
+<div class="p-4 border-b border-outline-variant bg-surface-container-lowest rounded-t-xl flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Issues</h3>
+<button class="text-primary hover:text-primary-container text-sm font-medium">View All</button>
+</div>
+<div class="p-4 space-y-4 flex-1 overflow-y-auto">
+<!-- Issue Card 1 -->
+<div class="p-4 border border-outline-variant rounded-lg hover:border-outline transition-colors bg-surface-container-lowest">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">#IVS-2847</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-error-container text-on-error-container border border-error/20">Open</span>
+</div>
+<h4 class="font-body-md text-body-md font-medium text-on-surface mb-1">Deep pothole near PMC school gate</h4>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant mt-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> FC Road</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 2 hrs ago</span>
+</div>
+</div>
+<!-- Issue Card 2 -->
+<div class="p-4 border border-outline-variant rounded-lg hover:border-outline transition-colors bg-surface-container-lowest">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">#IVS-2842</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A]">In Progress</span>
+</div>
+<h4 class="font-body-md text-body-md font-medium text-on-surface mb-1">Garbage pile-up at corner</h4>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant mt-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> Kothrud Depot</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 5 hrs ago</span>
+</div>
+</div>
+<!-- Issue Card 3 -->
+<div class="p-4 border border-outline-variant rounded-lg hover:border-outline transition-colors bg-surface-container-lowest opacity-75">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">#IVS-2830</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]">Resolved</span>
+</div>
+<h4 class="font-body-md text-body-md font-medium text-on-surface mb-1 text-on-surface-variant line-through">Broken streetlight</h4>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant mt-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> DP Road</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 1 day ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row (Charts & Quick Actions) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Left: Category Breakdown -->
+<div class="bg-surface border border-outline-variant rounded-xl p-stack-md shadow-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Category Breakdown</h3>
+<div class="space-y-4">
+<!-- Bar 1 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-on-surface font-medium">Pothole</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">42%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 42%"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-on-surface font-medium">Garbage</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">27%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-[#D97706] h-2 rounded-full" style="width: 27%"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-on-surface font-medium">Streetlight</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">19%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-secondary h-2 rounded-full" style="width: 19%"></div>
+</div>
+</div>
+<!-- Bar 4 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-on-surface font-medium">Drainage</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">12%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-outline h-2 rounded-full" style="width: 12%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Quick Actions -->
+<div class="bg-surface border border-outline-variant rounded-xl p-stack-md shadow-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-4 h-[calc(100%-48px)]">
+<button class="border border-outline-variant rounded-lg p-4 flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition-colors group">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">add_circle</span>
+</div>
+<span class="text-sm font-medium text-on-surface">Report Issue</span>
+</button>
+<button class="border border-outline-variant rounded-lg p-4 flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition-colors group">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">map</span>
+</div>
+<span class="text-sm font-medium text-on-surface">View Map</span>
+</button>
+<button class="border border-outline-variant rounded-lg p-4 flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition-colors group">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">forum</span>
+</div>
+<span class="text-sm font-medium text-on-surface">Community</span>
+</button>
+<button class="border border-outline-variant rounded-lg p-4 flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition-colors group">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">bar_chart</span>
+</div>
+<span class="text-sm font-medium text-on-surface">Analytics</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

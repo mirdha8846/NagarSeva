@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addVote } = require('../controllers/voteController');
+const { addVote, getUserVotedIssues } = require('../controllers/voteController');
 const { protect } = require('../middleware/authMiddleware');
 
 /**
@@ -42,5 +42,6 @@ const { protect } = require('../middleware/authMiddleware');
  *         description: Issue not found
  */
 router.post('/', protect, addVote);
+router.get('/my-votes', protect, getUserVotedIssues);
 
 module.exports = router;

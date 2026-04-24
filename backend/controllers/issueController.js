@@ -36,14 +36,16 @@ const getIssues = async (req, res) => {
     query.userId = userId;
   }
 
+  // Define spatial query separately because countDocuments doesn't support $near
+  let spatialQuery = {};
   if (lng && lat) {
-    query.location = {
+    spatialQuery.location = {
       $near: {
         $geometry: {
           type: 'Point',
           coordinates: [parseFloat(lng), parseFloat(lat)]
         },
-        $maxDistance: parseFloat(dist) || 5000 // default 5km
+        $maxDistance: parseFloat(dist) || 50000 // default 50km
       }
     };
   }
@@ -59,14 +61,15 @@ const getIssues = async (req, res) => {
     ];
   }
 
-  const issuesQuery = Issue.find(query).populate('userId', 'name').sort({ createdAt: -1 });
+  // Combine for search but run count on non-spatial query to avoid error
+  const issuesQuery = Issue.find({ ...query, ...spatialQuery }).populate('userId', 'name').sort({ createdAt: -1 });
   
   if (limit) {
     issuesQuery.limit(parseInt(limit));
   }
 
   const issues = await issuesQuery;
-  const total = await Issue.countDocuments(query);
+  const total = await Issue.countDocuments(query); // Count approximately without geo-spatial to avoid crash
 
   let userVotesMap = {};
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {

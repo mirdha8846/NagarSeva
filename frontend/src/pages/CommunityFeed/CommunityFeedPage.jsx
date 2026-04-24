@@ -136,10 +136,38 @@ const CommunityFeedPage = () => {
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
 
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationFetched, setLocationFetched] = useState(false);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          setLocationFetched(true);
+        },
+        (error) => {
+          console.log('Location disabled or error', error);
+          setUserLocation(null); // show all issues as fallback
+          setLocationFetched(true);
+        }
+      );
+    } else {
+      setUserLocation(null);
+      setLocationFetched(true);
+    }
+  }, []);
+
   const fetchIssues = async () => {
+    if (!locationFetched) return;
     setLoading(true);
     try {
       const params = {};
+      if (userLocation) {
+        params.lat = userLocation[0];
+        params.lng = userLocation[1];
+        params.dist = 50000; // 50km local radius
+      }
       if (category !== 'All') params.category = category;
       if (search) params.search = search;
       
@@ -190,9 +218,11 @@ const CommunityFeedPage = () => {
   };
 
   useEffect(() => {
-    fetchIssues();
-    fetchPetitions();
-  }, [category]); // Re-fetch on category change
+    if (locationFetched) {
+      fetchIssues();
+      fetchPetitions();
+    }
+  }, [category, locationFetched, userLocation]); // Re-fetch on category or location change
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();

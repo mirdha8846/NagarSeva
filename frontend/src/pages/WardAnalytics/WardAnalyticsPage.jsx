@@ -1,16 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../../api/apiClient';
+import { MapContainer, TileLayer, CircleMarker, Tooltip, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import './WardAnalyticsPage.css';
+
+const MapUpdater = ({ center }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (center) map.flyTo(center, 13, { animate: true });
+  }, [center, map]);
+  return null;
+};
 
 const WardAnalyticsPage = () => {
   const [stats, setStats] = useState(null);
+  const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userLocation, setUserLocation] = useState(null); // null = show all issues
+  const [locationFetched, setLocationFetched] = useState(false);
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          setLocationFetched(true);
+        },
+        (error) => {
+          console.log('Location disabled or error', error);
+          setUserLocation(null); // show all issues as fallback
+          setLocationFetched(true);
+        }
+      );
+    } else {
+      setUserLocation(null);
+      setLocationFetched(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!locationFetched) return;
+
     const fetchAnalytics = async () => {
       try {
-        const { data } = await apiClient.get('/analytics');
-        setStats(data);
+        setLoading(true);
+        // Only geo-filter if GPS is available
+        const queryParams = userLocation
+          ? `lat=${userLocation[0]}&lng=${userLocation[1]}&dist=50000`
+          : '';
+
+        const [analyticsRes, issuesRes] = await Promise.all([
+          apiClient.get(`/analytics${queryParams ? '?' + queryParams : ''}`),
+          apiClient.get(`/issues?limit=100${queryParams ? '&' + queryParams : ''}`) // fetch for density map
+        ]);
+        setStats(analyticsRes.data);
+        setIssues(issuesRes.data.issues || issuesRes.data);
       } catch (error) {
         console.error('Error fetching analytics:', error);
       } finally {
@@ -18,9 +62,9 @@ const WardAnalyticsPage = () => {
       }
     };
     fetchAnalytics();
-  }, []);
+  }, [locationFetched, userLocation]);
 
-  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading analytics...</div>;
+  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading localized analytics...</div>;
 
   const totalIssues = stats?.totalIssues || 0;
   const categories = stats?.categories || {};
@@ -30,8 +74,8 @@ const WardAnalyticsPage = () => {
       {/* Page Header */}
       <div className="analytics-header">
         <div>
-          <h1 className="register-title" style={{ fontSize: '32px', marginBottom: '4px' }}>Ward Analytics</h1>
-          <p className="register-subtitle" style={{ fontSize: '18px' }}>Performance and issue tracking for Kothrud, Pune.</p>
+          <h1 className="register-title" style={{ fontSize: '32px', marginBottom: '4px' }}>Local Analytics</h1>
+          <p className="register-subtitle" style={{ fontSize: '18px' }}>Performance and issue tracking based on your current location.</p>
         </div>
         <div className="analytics-filters">
           <div className="custom-select-wrapper">
@@ -56,23 +100,54 @@ const WardAnalyticsPage = () => {
       {/* Heatmap Section */}
       <section className="analytics-section heatmap-section">
         <div className="section-card-header">
-          <h3 className="card-title">Issue Density Heatmap — Kothrud, Pune</h3>
+          <h3 className="card-title">Issue Density Map — Local Area</h3>
           <div className="heatmap-legend">
-            <span>LOW</span>
-            <div className="legend-gradient"></div>
-            <span>HIGH</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: 'var(--error)', opacity: 0.7 }}></div>
+              <span style={{ fontSize: '12px' }}>High Density Concentration</span>
+            </div>
           </div>
         </div>
-        <div className="heatmap-canvas">
-          <img 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxU4_bniwTPCMG7wfP4-9QYn_Mds00lZK0M-V9JCvxpW5giz5dDe30Yjp5TUb680l5B4Y_IK_19gCVy58zHiItZcLcAejuP9rpaD6XpWwpN_x4VluusTcarzu1OCgMuTqUdJ_AkH4XW5K3AT8WPqsyqsN9YCpl_eRuH20fjPcU-unnUEU_LiyxpsgedSGywyxsC2sC8N9zEsi1FxGOYZ1HlYxVvc46AsCSvumlS9GMOsLbNVxTKWT0InVeZCojChehRkak9SjRowQ" 
-            alt="Map Heatmap" 
-            className="heatmap-img"
-          />
-          {/* Animated Markers for visual pop */}
-          <div className="pulse-marker p1"></div>
-          <div className="pulse-marker p2"></div>
-          <div className="pulse-marker p3"></div>
+        <div className="heatmap-canvas" style={{ padding: 0, overflow: 'hidden' }}>
+          <MapContainer center={userLocation || [20.5937, 78.9629]} zoom={userLocation ? 13 : 5} style={{ height: '100%', width: '100%', zIndex: 1 }}>
+            <TileLayer
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+            />
+            <MapUpdater center={userLocation} />
+            
+            {/* User Location Indicator - only show if GPS available */}
+            {userLocation && (
+              <CircleMarker 
+                center={userLocation} 
+                radius={7} 
+                fillColor="#3b82f6" 
+                color="white" 
+                weight={2} 
+                fillOpacity={1} 
+              >
+                <Tooltip>You are here</Tooltip>
+              </CircleMarker>
+            )}
+
+            {issues.filter(i => i.location?.coordinates).map(issue => {
+              const pos = [issue.location.coordinates[1], issue.location.coordinates[0]];
+              return (
+                <CircleMarker 
+                  key={issue._id} 
+                  center={pos} 
+                  radius={8}
+                  fillColor="var(--error)"
+                  color="var(--error)"
+                  weight={1}
+                  opacity={0.8}
+                  fillOpacity={0.6}
+                >
+                  <Tooltip>{issue.title} ({issue.category})</Tooltip>
+                </CircleMarker>
+              );
+            })}
+          </MapContainer>
         </div>
       </section>
 

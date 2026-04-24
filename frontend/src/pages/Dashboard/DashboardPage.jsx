@@ -2,7 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
+import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import './DashboardPage.css';
+
+// Fix for default Leaflet marker icons in React
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
+});
+
+const MapUpdater = ({ center }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (center) map.flyTo(center, 14, { animate: true });
+  }, [center, map]);
+  return null;
+};
 
 const StatCard = ({ icon, color, bgColor, label, value, trend, trendColor, trendBg }) => (
   <div className="stat-card">
@@ -39,22 +62,67 @@ const ProgressBarCard = ({ icon, color, bgColor, label, value, percentage }) => 
   </div>
 );
 
+const getMarkerIcon = (status) => {
+  let color = 'var(--error)'; // open
+  if (status === 'resolved') color = '#059669';
+  if (status === 'in_progress') color = '#D97706';
+  
+  return L.divIcon({
+    className: 'custom-status-icon',
+    html: `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
+  });
+};
+
 const DashboardPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [analytics, setAnalytics] = useState(null);
   const [recentIssues, setRecentIssues] = useState([]);
+  const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userLocation, setUserLocation] = useState(null); // null = no geo filter (GPS not yet acquired)
+  const [locationFetched, setLocationFetched] = useState(false);
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          setLocationFetched(true);
+        },
+        (error) => {
+          console.log('Location disabled or error', error);
+          setUserLocation(null); // No geo filter — show all issues
+          setLocationFetched(true);
+        }
+      );
+    } else {
+      setUserLocation(null); // No geo filter — show all issues
+      setLocationFetched(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!locationFetched) return;
+
     const fetchData = async () => {
       try {
+        setLoading(true);
+        // Only add geo params if we have a real GPS location
+        const queryParams = userLocation
+          ? `lat=${userLocation[0]}&lng=${userLocation[1]}&dist=50000`
+          : ''; // no geo filter when GPS is unavailable
+
         const [analyticsRes, issuesRes] = await Promise.all([
-          apiClient.get('/analytics'),
-          apiClient.get('/issues?limit=5')
+          apiClient.get(`/analytics${queryParams ? '?' + queryParams : ''}`),
+          apiClient.get(`/issues?limit=50${queryParams ? '&' + queryParams : ''}`)
         ]);
         setAnalytics(analyticsRes.data);
-        setRecentIssues(issuesRes.data.issues || issuesRes.data);
+        const fetchedIssues = issuesRes.data.issues || issuesRes.data;
+        setAllIssues(fetchedIssues);
+        setRecentIssues(fetchedIssues.slice(0, 5));
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
@@ -62,7 +130,7 @@ const DashboardPage = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [locationFetched, userLocation]);
 
   if (loading) {
     return <div className="loading-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Loading Dashboard...</div>;
@@ -77,7 +145,7 @@ const DashboardPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <h2 className="register-title" style={{ fontSize: '28px' }}>Good morning, {user?.name?.split(' ')[0] || 'Citizen'} 👋</h2>
-          <p className="register-subtitle">Ward 42 • Kothrud, Pune • Last updated 2 min ago</p>
+          <p className="register-subtitle">Local Feed • {locationFetched ? 'Based on live location' : 'Locating...'} • Last updated just now</p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button className="login-button" style={{ backgroundColor: 'white', color: 'var(--on-surface-variant)', border: '1px solid var(--outline)', width: 'auto', padding: '0 16px', height: '40px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -141,18 +209,49 @@ const DashboardPage = () => {
       <div className="split-grid">
         <div className="card-frame">
           <div className="card-header">
-            <h3 className="card-title">Issue Map — Ward 42</h3>
+            <h3 className="card-title">Local Issue Map</h3>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button className="send-otp-btn" style={{ padding: '4px 12px', border: '1px solid var(--outline)', backgroundColor: 'var(--surface-container)' }}>All</button>
               <button className="send-otp-btn" style={{ padding: '4px 12px', border: '1px solid var(--outline-variant)', backgroundColor: 'transparent', color: 'var(--on-surface-variant)' }}>Pothole</button>
             </div>
           </div>
-          <div className="map-placeholder">
-            <div className="map-marker" style={{ top: '25%', left: '33%', backgroundColor: 'var(--error)' }}></div>
-            <div className="map-marker" style={{ top: '50%', left: '50%', backgroundColor: '#D97706' }}></div>
-            <div className="map-marker" style={{ bottom: '33%', right: '25%', backgroundColor: 'var(--primary)' }}></div>
-            <div className="map-marker" style={{ top: '33%', right: '33%', backgroundColor: '#059669' }}></div>
-            <div style={{ position: 'absolute', bottom: '16px', left: '16px', backgroundColor: 'rgba(255,255,255,0.9)', padding: '12px', borderRadius: '8px', border: '1px solid var(--outline-variant)', fontSize: '12px' }}>
+          <div className="map-placeholder" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
+            <MapContainer center={userLocation || [20.5937, 78.9629]} zoom={userLocation ? 13 : 5} style={{ height: '100%', width: '100%', zIndex: 1 }}>
+              <TileLayer
+                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+              />
+              <MapUpdater center={userLocation} />
+              
+              {/* User Location Indicator - only show if GPS available */}
+              {userLocation && (
+                <CircleMarker 
+                  center={userLocation} 
+                  radius={7} 
+                  fillColor="#3b82f6" 
+                  color="white" 
+                  weight={2} 
+                  fillOpacity={1} 
+                >
+                  <Popup><strong>You are here</strong></Popup>
+                </CircleMarker>
+              )}
+
+              {allIssues.filter(i => i.location?.coordinates).map(issue => (
+                <Marker 
+                  key={issue._id} 
+                  position={[issue.location.coordinates[1], issue.location.coordinates[0]]}
+                  icon={getMarkerIcon(issue.status)}
+                >
+                  <Popup>
+                    <strong>{issue.title}</strong><br/>
+                    <span style={{ fontSize: '11px', color: 'var(--on-surface-variant)' }}>Status: {issue.status}</span>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+            
+            <div style={{ position: 'absolute', bottom: '16px', left: '16px', zIndex: 1000, backgroundColor: 'rgba(255,255,255,0.9)', padding: '12px', borderRadius: '8px', border: '1px solid var(--outline-variant)', fontSize: '12px', pointerEvents: 'none' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: 'var(--error)' }}></div> Open (Critical)</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#D97706' }}></div> In Progress</div>

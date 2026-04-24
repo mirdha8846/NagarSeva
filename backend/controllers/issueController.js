@@ -4,24 +4,40 @@ const Issue = require('../models/Issue');
 // @route   POST /api/issues
 // @access  Private (Citizen)
 const createIssue = async (req, res) => {
-  const { title, description, category, longitude, latitude } = req.body;
+  try {
+    const { title, description, category, longitude, latitude } = req.body;
 
-  const images = req.files ? req.files.map(file => `uploads/${file.filename}`) : [];
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
 
-  const issue = new Issue({
-    title,
-    description,
-    category,
-    images,
-    location: {
-      type: 'Point',
-      coordinates: [parseFloat(longitude), parseFloat(latitude)]
-    },
-    userId: req.user._id
-  });
+    if (!title || !description || !category) {
+      return res.status(400).json({ message: 'Title, description, and category are required.' });
+    }
 
-  const createdIssue = await issue.save();
-  res.status(201).json(createdIssue);
+    if (isNaN(lat) || isNaN(lng)) {
+      return res.status(400).json({ message: 'Valid GPS coordinates are required. Please allow location access.' });
+    }
+
+    const images = req.files ? req.files.map(file => `uploads/${file.filename}`) : [];
+
+    const issue = new Issue({
+      title,
+      description,
+      category,
+      images,
+      location: {
+        type: 'Point',
+        coordinates: [lng, lat]
+      },
+      userId: req.user._id
+    });
+
+    const createdIssue = await issue.save();
+    res.status(201).json(createdIssue);
+  } catch (error) {
+    console.error('Create issue error:', error.message);
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // @desc    Get all issues (can filter by location)

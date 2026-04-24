@@ -48,7 +48,13 @@ const ReportIssuePage = () => {
     );
   };
 
+  // Auto-acquire GPS on mount so it's ready before step 2
   useEffect(() => {
+    getLocation();
+  }, []);
+
+  useEffect(() => {
+    // Re-try if still on default and user reached step 2
     if (currentStep === 2 && !locationData.loading && !locationData.error && locationData.lat === 18.5204) {
       getLocation();
     }
@@ -93,6 +99,16 @@ const ReportIssuePage = () => {
   };
 
   const handleSubmit = async () => {
+    if (!formData.title || !formData.category || !formData.description) {
+      alert('Please fill in the title, category, and description.');
+      return;
+    }
+
+    if (isNaN(locationData.lat) || isNaN(locationData.lng) || locationData.error) {
+      alert('GPS location not available. Please go back to Step 2 and allow location access.');
+      return;
+    }
+
     setLoading(true);
     try {
       const data = new FormData();
@@ -113,7 +129,8 @@ const ReportIssuePage = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Error reporting issue:', error);
-      alert('Failed to report issue. Please try again.');
+      const msg = error.response?.data?.message || 'Failed to report issue. Please try again.';
+      alert(msg);
     } finally {
       setLoading(false);
     }

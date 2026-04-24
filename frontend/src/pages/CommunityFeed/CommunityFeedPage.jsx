@@ -3,41 +3,32 @@ import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
 import './CommunityFeedPage.css';
 
-const IssueCard = ({ id, category, time, title, description, images, author, likes: initialLikes, dislikes: initialDislikes, comments, support }) => {
+const IssueCard = ({ id, category, time, title, description, images, author, likes: initialLikes, userVote, comments, petition, onStartPetition, onSignPetition }) => {
   const [likes, setLikes] = useState(initialLikes || 0);
-  const [dislikes, setDislikes] = useState(initialDislikes || 0);
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
+  const [liked, setLiked] = useState(userVote === 'upvote');
+  const [disliked, setDisliked] = useState(userVote === 'downvote');
 
-  const handleLike = () => {
-    if (liked) {
-      setLikes(likes - 1);
-      setLiked(false);
-    } else {
-      setLikes(likes + 1);
-      setLiked(true);
-      if (disliked) {
-        setDisdislikes(dislikes - 1);
-        setDisliked(false);
-      }
+  const handleLike = async () => {
+    try {
+      const { data } = await apiClient.post('/votes', { issueId: id, type: 'upvote' });
+      setLikes(data.votesCount);
+      setLiked(data.userVote === 'upvote');
+      setDisliked(data.userVote === 'downvote');
+    } catch (e) {
+      console.error('Error voting', e);
     }
   };
 
-  const handleDislike = () => {
-    if (disliked) {
-      setDisdislikes(dislikes - 1);
-      setDisliked(false);
-    } else {
-      setDisdislikes(dislikes + 1);
-      setDisliked(true);
-      if (liked) {
-        setLikes(likes - 1);
-        setLiked(false);
-      }
+  const handleDislike = async () => {
+    try {
+      const { data } = await apiClient.post('/votes', { issueId: id, type: 'downvote' });
+      setLikes(data.votesCount);
+      setLiked(data.userVote === 'upvote');
+      setDisliked(data.userVote === 'downvote');
+    } catch (e) {
+      console.error('Error voting', e);
     }
   };
-
-  const setDisdislikes = (val) => setDislikes(val); // Helper for the logic above
 
   return (
     <article className="feed-card">
@@ -52,29 +43,85 @@ const IssueCard = ({ id, category, time, title, description, images, author, lik
       <p className="card-description">{description}</p>
       {images && images.length > 0 && <img src={`http://localhost:5000/${images[0]}`} alt={title} className="card-image" />}
       
-      <div className="card-author">
+      {petition && (
+        <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', padding: '12px', borderRadius: '8px', margin: '16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontWeight: 600, color: '#0369A1', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>local_fire_department</span>
+              Active Petition
+            </div>
+            <div style={{ fontSize: '13px', color: '#0C4A6E', marginTop: '4px' }}>
+              {petition.count} supporters have signed this!
+            </div>
+          </div>
+          <button 
+            className="login-button" 
+            style={{ width: 'auto', padding: '0 16px', height: '36px', fontSize: '13px' }}
+            onClick={() => onSignPetition(petition._id)}
+          >
+            Sign Petition
+          </button>
+        </div>
+      )}
+
+      <div className="card-author" style={{ marginTop: petition ? '0' : '16px' }}>
         <div className="author-info">
           <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>person</span>
           <span>@{author || 'anonymous'}</span>
         </div>
         <div className="social-actions">
           <button className={`social-btn ${liked ? 'active' : ''}`} onClick={handleLike}>
-            <span className={`material-symbols-outlined ${liked ? 'fill' : ''}`} style={{ fontSize: '18px' }}>
-              thumb_up
-            </span>
+            <span className={`material-symbols-outlined ${liked ? 'fill' : ''}`} style={{ fontSize: '18px' }}>thumb_up</span>
             {likes}
           </button>
           <button className={`social-btn ${disliked ? 'active' : ''}`} onClick={handleDislike}>
-            <span className={`material-symbols-outlined ${disliked ? 'fill' : ''}`} style={{ fontSize: '18px' }}>
-              thumb_down
-            </span>
-            {dislikes}
+            <span className={`material-symbols-outlined ${disliked ? 'fill' : ''}`} style={{ fontSize: '18px' }}>thumb_down</span>
           </button>
-          <button className="social-btn">
-            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>chat_bubble</span>
-            {comments || 0}
-          </button>
+          
+          {!petition && (
+            <button className="social-btn" style={{ color: 'var(--primary)', fontWeight: 500, borderColor: 'var(--primary)' }} onClick={() => onStartPetition(id, title)}>
+              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>campaign</span>
+              Start Petition
+            </button>
+          )}
         </div>
+      </div>
+    </article>
+  );
+};
+
+const PetitionCard = ({ petition, onSignPetition }) => {
+  const percentage = Math.min((petition.count / 5000) * 100, 100);
+  
+  return (
+    <article className="feed-card" style={{ borderLeft: '4px solid var(--primary)' }}>
+      <div className="card-meta">
+        <div className="meta-left">
+          <span className="category-tag" style={{ backgroundColor: 'var(--primary-container)', color: 'var(--on-primary-container)' }}>
+            Petition
+          </span>
+        </div>
+        <span className="card-time">{new Date(petition.createdAt).toLocaleDateString()}</span>
+      </div>
+      <h3 className="card-title" style={{ fontSize: '20px' }}>{petition.title}</h3>
+      <p className="card-description" style={{ color: 'var(--on-surface-variant)' }}>
+        This action was started to address the issue: "{petition.issueId?.title || 'Unknown Issue'}".
+      </p>
+      
+      <div style={{ margin: '20px 0 16px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: '8px', fontWeight: 500 }}>
+          <span>{petition.count?.toLocaleString() || 0} Signatures</span>
+          <span>Goal: 5,000</span>
+        </div>
+        <div className="progress-container" style={{ height: '8px' }}>
+          <div className="progress-fill" style={{ backgroundColor: 'var(--primary)', width: `${percentage}%`, height: '8px' }}></div>
+        </div>
+      </div>
+      
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <button className="login-button" style={{ width: 'auto', padding: '0 24px', height: '40px' }} onClick={() => onSignPetition(petition._id)}>
+          Sign this Petition
+        </button>
       </div>
     </article>
   );
@@ -82,6 +129,8 @@ const IssueCard = ({ id, category, time, title, description, images, author, lik
 
 const CommunityFeedPage = () => {
   const [issues, setIssues] = useState([]);
+  const [petitions, setPetitions] = useState([]);
+  const [viewMode, setViewMode] = useState('issues'); // 'issues' or 'petitions'
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
@@ -104,8 +153,45 @@ const CommunityFeedPage = () => {
     }
   };
 
+  const fetchPetitions = async () => {
+    try {
+      const { data } = await apiClient.get('/petitions');
+      setPetitions(data);
+    } catch (error) {
+      console.error('Error fetching petitions:', error);
+    }
+  };
+
+  const handleSignPetition = async (id) => {
+    try {
+      await apiClient.post(`/petitions/${id}/sign`);
+      alert('You have successfully signed this petition!');
+      fetchPetitions(); // Refetch to update the stats
+    } catch (error) {
+      alert(error.response?.data?.message || 'Error signing petition');
+    }
+  };
+
+  const handleStartPetition = async (issueId, issueTitle) => {
+    const confirmation = window.confirm(`Start a petition for: "${issueTitle}"?`);
+    if (!confirmation) return;
+
+    try {
+      await apiClient.post('/petitions', { 
+        title: `Action needed: Fix ${issueTitle}`, 
+        issueId 
+      });
+      alert('Petition successfully created! You are the first supporter.');
+      fetchPetitions();
+      setViewMode('petitions');
+    } catch (error) {
+      alert(error.response?.data?.message || 'Error creating petition');
+    }
+  };
+
   useEffect(() => {
     fetchIssues();
+    fetchPetitions();
   }, [category]); // Re-fetch on category change
 
   const handleSearchSubmit = (e) => {
@@ -158,35 +244,68 @@ const CommunityFeedPage = () => {
 
       {/* Center - Feed */}
       <div className="feed-content">
-        <div className="feed-header">
-          <span className="feed-count">Showing {total} issues</span>
+        <div className="feed-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button 
+              className={`send-otp-btn ${viewMode === 'issues' ? 'active-tab' : ''}`} 
+              style={{ backgroundColor: viewMode === 'issues' ? 'var(--primary-container)' : 'transparent', color: viewMode === 'issues' ? 'var(--on-primary-container)' : 'var(--on-surface-variant)', border: 'none', fontWeight: 600, fontSize: '15px', padding: '8px 16px', borderRadius: '100px' }}
+              onClick={() => setViewMode('issues')}
+            >
+              Recent Issues
+            </button>
+            <button 
+              className={`send-otp-btn ${viewMode === 'petitions' ? 'active-tab' : ''}`} 
+              style={{ backgroundColor: viewMode === 'petitions' ? 'var(--primary-container)' : 'transparent', color: viewMode === 'petitions' ? 'var(--on-primary-container)' : 'var(--on-surface-variant)', border: 'none', fontWeight: 600, fontSize: '15px', padding: '8px 16px', borderRadius: '100px' }}
+              onClick={() => setViewMode('petitions')}
+            >
+              Active Petitions
+            </button>
+          </div>
+          
           <select className="sort-select">
             <option>Recent</option>
             <option>Most Supported</option>
           </select>
         </div>
+        
         <div className="feed-list">
-          {loading ? (
-            <div style={{ textAlign: 'center', padding: '40px' }}>Loading issues...</div>
-          ) : issues.length > 0 ? (
-            issues.map(issue => (
-              <IssueCard 
-                key={issue._id}
-                id={issue._id}
-                category={issue.category}
-                time={issue.createdAt}
-                title={issue.title}
-                description={issue.description}
-                images={issue.images}
-                author={issue.userId?.name}
-                likes={0}
-                dislikes={0}
-                comments={0}
-                support={Math.floor(Math.random() * 40) + 60} // Decorative for now
-              />
-            ))
+          {viewMode === 'issues' ? (
+            loading ? (
+              <div style={{ textAlign: 'center', padding: '40px' }}>Loading issues...</div>
+            ) : issues.length > 0 ? (
+              issues.map(issue => (
+                <IssueCard 
+                  key={issue._id}
+                  id={issue._id}
+                  category={issue.category}
+                  time={issue.createdAt}
+                  title={issue.title}
+                  description={issue.description}
+                  images={issue.images}
+                  author={issue.userId?.name}
+                  likes={issue.votesCount || 0}
+                  userVote={issue.userVote}
+                  comments={0}
+                  petition={petitions.find(p => p.issueId?._id === issue._id || p.issueId === issue._id)}
+                  onStartPetition={handleStartPetition}
+                  onSignPetition={handleSignPetition}
+                />
+              ))
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px' }}>No issues found.</div>
+            )
           ) : (
-            <div style={{ textAlign: 'center', padding: '40px' }}>No issues found.</div>
+            petitions.length > 0 ? (
+              petitions.map(petition => (
+                <PetitionCard 
+                  key={petition._id}
+                  petition={petition}
+                  onSignPetition={handleSignPetition}
+                />
+              ))
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px' }}>No active petitions currently running.</div>
+            )
           )}
         </div>
       </div>
@@ -198,19 +317,30 @@ const CommunityFeedPage = () => {
             <span className="material-symbols-outlined" style={{ color: 'var(--tertiary-container)', fontSize: '20px' }}>local_fire_department</span>
             Active Petitions
           </h2>
-          <div className="petition-item">
-            <h4 className="petition-title">Fix all potholes on FC Road</h4>
-            <div className="petition-stats">
-              <span>SIGNATURES</span>
-              <span>4,500 / 5,000</span>
+          
+          {petitions.length > 0 ? petitions.map(petition => (
+            <div className="petition-item" key={petition._id}>
+              <h4 className="petition-title">{petition.title}</h4>
+              <div className="petition-stats">
+                <span>SIGNATURES</span>
+                <span>{petition.count?.toLocaleString() || 0} / 5,000</span>
+              </div>
+              <div className="progress-container" style={{ height: '6px', marginBottom: '12px' }}>
+                <div className="progress-fill" style={{ backgroundColor: 'var(--primary)', width: `${Math.min((petition.count / 5000) * 100, 100)}%`, height: '6px' }}></div>
+              </div>
+              <button 
+                className="login-button" 
+                style={{ backgroundColor: 'white', color: 'var(--primary)', border: '1px solid var(--primary)', height: '32px', fontSize: '12px' }}
+                onClick={() => handleSignPetition(petition._id)}
+              >
+                Sign Petition
+              </button>
             </div>
-            <div className="progress-container" style={{ height: '6px', marginBottom: '12px' }}>
-              <div className="progress-fill" style={{ backgroundColor: 'var(--primary)', width: '90%', height: '6px' }}></div>
+          )) : (
+            <div style={{ textAlign: 'center', padding: '16px', color: 'var(--on-surface-variant)' }}>
+              No active petitions found.
             </div>
-            <button className="login-button" style={{ backgroundColor: 'white', color: 'var(--primary)', border: '1px solid var(--primary)', height: '32px', fontSize: '12px' }}>
-              Sign Petition
-            </button>
-          </div>
+          )}
         </div>
 
         <div className="aside-card">

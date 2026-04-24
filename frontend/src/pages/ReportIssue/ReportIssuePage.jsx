@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
@@ -11,6 +11,48 @@ const ReportIssuePage = () => {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
+  
+  const [locationData, setLocationData] = useState({
+    lat: 18.5204, // default to Pune
+    lng: 73.8567,
+    loading: false,
+    error: null
+  });
+
+  const getLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationData(prev => ({ ...prev, error: 'Geolocation is not supported by your browser' }));
+      return;
+    }
+    
+    setLocationData(prev => ({ ...prev, loading: true, error: null }));
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocationData({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          loading: false,
+          error: null
+        });
+        setFormData(prev => ({ ...prev, location: 'Current GPS Coordinates' }));
+      },
+      (error) => {
+        setLocationData(prev => ({ 
+          ...prev, 
+          loading: false, 
+          error: 'Failed to access GPS. Please allow location permissions.' 
+        }));
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
+  useEffect(() => {
+    if (currentStep === 2 && !locationData.loading && !locationData.error && locationData.lat === 18.5204) {
+      getLocation();
+    }
+  }, [currentStep]);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -58,8 +100,8 @@ const ReportIssuePage = () => {
       data.append('description', formData.description);
       data.append('category', formData.category);
       data.append('priority', formData.priority.toLowerCase());
-      data.append('longitude', '73.8567');
-      data.append('latitude', '18.5204');
+      data.append('longitude', locationData.lng.toString());
+      data.append('latitude', locationData.lat.toString());
 
       images.forEach(img => {
         data.append('images', img);
@@ -198,11 +240,38 @@ const ReportIssuePage = () => {
             {currentStep === 2 && (
                <div style={{ padding: '20px', textAlign: 'center' }}>
                  <h3>Location</h3>
-                 <p>Using current GPS location: <strong>{formData.location}</strong></p>
-                 <div style={{ background: '#f1f5f9', height: '200px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
-                   <span className="material-symbols-outlined" style={{ fontSize: '48px', color: 'var(--primary)' }}>location_on</span>
-                   <span>Map View Placeholder</span>
-                 </div>
+                 
+                 {locationData.loading ? (
+                   <div style={{ padding: '40px' }}>
+                     <span className="material-symbols-outlined" style={{ fontSize: '48px', animation: 'spin 1s linear infinite' }}>refresh</span>
+                     <p>Acquiring real-time GPS coordinates...</p>
+                   </div>
+                 ) : locationData.error ? (
+                   <div style={{ padding: '40px', color: 'var(--error)' }}>
+                     <span className="material-symbols-outlined" style={{ fontSize: '48px' }}>location_disabled</span>
+                     <p>{locationData.error}</p>
+                     <button className="outline-btn" style={{ marginTop: '16px' }} onClick={getLocation}>Retry GPS</button>
+                   </div>
+                 ) : (
+                   <>
+                     <p>Using precise GPS location: <strong>{formData.location}</strong></p>
+                     <p style={{ fontSize: '13px', color: 'var(--on-surface-variant)', marginTop: '4px' }}>
+                       Lat: {locationData.lat.toFixed(4)}, Lng: {locationData.lng.toFixed(4)}
+                     </p>
+                     <div style={{ background: '#f1f5f9', height: '250px', borderRadius: '8px', overflow: 'hidden', marginTop: '20px', border: '1px solid var(--outline-variant)' }}>
+                       <iframe 
+                         width="100%" 
+                         height="100%" 
+                         frameBorder="0" 
+                         scrolling="no" 
+                         marginHeight="0" 
+                         marginWidth="0" 
+                         src={`https://www.openstreetmap.org/export/embed.html?bbox=${locationData.lng-0.005},${locationData.lat-0.005},${locationData.lng+0.005},${locationData.lat+0.005}&layer=mapnik&marker=${locationData.lat},${locationData.lng}`}
+                         style={{ border: 'none' }}
+                       ></iframe>
+                     </div>
+                   </>
+                 )}
                </div>
             )}
 

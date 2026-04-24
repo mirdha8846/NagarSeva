@@ -18,7 +18,11 @@ const addVote = async (req, res) => {
 
   if (existingVote) {
     if (existingVote.type === type) {
-      return res.status(400).json({ message: 'Already voted' });
+      // Toggle off
+      await Vote.deleteOne({ _id: existingVote._id });
+      issue.votesCount += (type === 'upvote' ? -1 : 1);
+      await issue.save();
+      return res.json({ message: 'Vote removed' });
     } else {
       // Change vote type
       existingVote.type = type;

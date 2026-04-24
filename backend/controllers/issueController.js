@@ -68,8 +68,29 @@ const getIssues = async (req, res) => {
   const issues = await issuesQuery;
   const total = await Issue.countDocuments(query);
 
+  let userVotesMap = {};
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    const token = req.headers.authorization.split(' ')[1];
+    try {
+      const jwt = require('jsonwebtoken');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      const Vote = require('../models/Vote');
+      const userVotes = await Vote.find({ userId: decoded.id, issueId: { $in: issues.map(i => i._id) } });
+      userVotes.forEach(v => {
+        userVotesMap[v.issueId.toString()] = v.type;
+      });
+    } catch (e) {
+      console.error('Error verifying token for issues:', e);
+    }
+  }
+
+  const issuesWithVotes = issues.map(issue => ({
+    ...issue.toObject(),
+    userVote: userVotesMap[issue._id.toString()] || null
+  }));
+
   res.json({
-    issues,
+    issues: issuesWithVotes,
     total,
     count: issues.length
   });

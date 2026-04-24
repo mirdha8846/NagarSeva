@@ -68,7 +68,7 @@ app.use('/api/votes', require('./routes/voteRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
-
+app.use('/api/petitions', require('./routes/petitionRoutes'));
 // Static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 

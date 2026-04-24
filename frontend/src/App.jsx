@@ -11,6 +11,7 @@ import CivicAuthorityPage from './pages/CivicAuthority/CivicAuthorityPage';
 import UserProfilePage from './pages/UserProfile/UserProfilePage';
 import WardAnalyticsPage from './pages/WardAnalytics/WardAnalyticsPage';
 import MainLayout from './components/Layout/MainLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
@@ -20,18 +21,22 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        {/* Main App Layout Routes */}
-        <Route element={<MainLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/community" element={<CommunityFeedPage />} />
-          <Route path="/projects" element={<GovernmentProjectsPage />} />
-          <Route path="/authority" element={<CivicAuthorityPage />} />
-          <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="/analytics" element={<WardAnalyticsPage />} />
+        
+        {/* Main App Layout Routes (Protected) */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/community" element={<CommunityFeedPage />} />
+            <Route path="/projects" element={<GovernmentProjectsPage />} />
+            <Route path="/authority" element={<CivicAuthorityPage />} />
+            <Route path="/profile" element={<UserProfilePage />} />
+            <Route path="/analytics" element={<WardAnalyticsPage />} />
+          </Route>
+          
+          {/* Solo Routes (No Sidebar, Protected) */}
+          <Route path="/report-issue" element={<ReportIssuePage />} />
         </Route>
 
-        {/* Solo Routes (No Sidebar) */}
-        <Route path="/report-issue" element={<ReportIssuePage />} />
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>

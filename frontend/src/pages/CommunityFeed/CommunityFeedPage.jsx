@@ -63,7 +63,6 @@ const IssueCard = ({ id, category, time, title, description, progress, status, s
       </div>
 
       <p className="card-description">{description}</p>
-      {images && images.length > 0 && <img src={`http://localhost:5000/${images[0]}`} alt={title} className="card-image" />}
       
       {petition && (
         <div style={{ backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', padding: '12px', borderRadius: '8px', margin: '16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -100,10 +99,21 @@ const IssueCard = ({ id, category, time, title, description, progress, status, s
             <span className={`material-symbols-outlined ${disliked ? 'fill' : ''}`} style={{ fontSize: '18px' }}>thumb_down</span>
           </button>
           
+          {images && images.length > 0 && (
+            <button 
+              className="social-btn" 
+              style={{ color: '#0369A1' }}
+              onClick={() => onTrackStatus({ type: 'image', url: `http://localhost:5000/${images[0]}` })}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>image</span>
+              View Proof
+            </button>
+          )}
+
           <button 
             className="social-btn" 
             style={{ color: 'var(--primary)', fontWeight: 600 }}
-            onClick={() => onTrackStatus({ id, title, status, progress, statusUpdates })}
+            onClick={() => onTrackStatus({ type: 'timeline', id, title, status, progress, statusUpdates })}
           >
             <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>analytics</span>
             Track Status
@@ -162,7 +172,17 @@ const CommunityFeedPage = () => {
   const [issues, setIssues] = useState([]);
   const [petitions, setPetitions] = useState([]);
   const [selectedTimeline, setSelectedTimeline] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [viewMode, setViewMode] = useState('issues'); // 'issues' or 'petitions'
+
+  const handleTrackStatus = (data) => {
+    if (data.type === 'image') {
+      setSelectedImage(data.url);
+    } else {
+      setSelectedTimeline(data);
+    }
+  };
+
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
@@ -354,7 +374,7 @@ const CommunityFeedPage = () => {
                   petition={petitions.find(p => p.issueId?._id === issue._id || p.issueId === issue._id)}
                   onStartPetition={handleStartPetition}
                   onSignPetition={handleSignPetition}
-                  onTrackStatus={setSelectedTimeline}
+                  onTrackStatus={handleTrackStatus}
                 />
               ))
             ) : (
@@ -467,6 +487,17 @@ const CommunityFeedPage = () => {
               onClick={() => setSelectedTimeline(null)}
             >
               Close
+            </button>
+          </div>
+        </div>
+      )}
+      {/* Image Preview Modal */}
+      {selectedImage && (
+        <div className="modal-overlay" onClick={() => setSelectedImage(null)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000 }}>
+          <div className="modal-content" style={{ backgroundColor: 'transparent', padding: '16px', maxWidth: '80vw' }} onClick={e => e.stopPropagation()}>
+            <img src={selectedImage} alt="Visual Proof" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }} />
+            <button onClick={() => setSelectedImage(null)} style={{ position: 'absolute', top: '-40px', right: 0, background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '32px' }}>close</span>
             </button>
           </div>
         </div>

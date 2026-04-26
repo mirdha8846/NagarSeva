@@ -11,6 +11,7 @@ const AuthorityDashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, pending: 0, resolved: 0 });
   const [selectedIssue, setSelectedIssue] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [updateForm, setUpdateForm] = useState({ status: '', progress: 0, comment: '' });
   const [activeTab, setActiveTab] = useState('issues');
 
@@ -139,6 +140,7 @@ const AuthorityDashboardPage = () => {
                   <thead>
                     <tr>
                       <th>Issue ID</th>
+                      <th>Evidence</th>
                       <th>Reporter</th>
                       <th>Category</th>
                       <th>Status</th>
@@ -150,6 +152,19 @@ const AuthorityDashboardPage = () => {
                     {issues.map(issue => (
                       <tr key={issue._id}>
                         <td className="mono">#{issue._id.slice(-6).toUpperCase()}</td>
+                        <td>
+                          {issue.images && issue.images.length > 0 ? (
+                            <div 
+                              className="evidence-thumb" 
+                              onClick={() => setSelectedImage(`http://localhost:5000/${issue.images[0]}`)}
+                            >
+                              <img src={`http://localhost:5000/${issue.images[0]}`} alt="Proof" />
+                              <span className="material-symbols-outlined">zoom_in</span>
+                            </div>
+                          ) : (
+                            <span className="no-proof">No Image</span>
+                          )}
+                        </td>
                         <td>{issue.userId?.name || 'Anonymous'}</td>
                         <td><span className="tag">{issue.category}</span></td>
                         <td><span className={`status-pill ${issue.status}`}>{issue.status}</span></td>
@@ -296,6 +311,20 @@ const AuthorityDashboardPage = () => {
                 <button type="submit" className="submit-btn">Publish Update</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Image Preview Modal */}
+      {selectedImage && (
+        <div className="modal-overlay" onClick={() => setSelectedImage(null)} style={{ zIndex: 2000 }}>
+          <div className="modal-content" style={{ maxWidth: '80vw', padding: '16px', backgroundColor: 'transparent' }} onClick={e => e.stopPropagation()}>
+            <img src={selectedImage} alt="Large Preview" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }} />
+            <button 
+              onClick={() => setSelectedImage(null)}
+              style={{ position: 'absolute', top: '-40px', right: '0', color: 'white', background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: '32px' }}>close</span>
+            </button>
           </div>
         </div>
       )}

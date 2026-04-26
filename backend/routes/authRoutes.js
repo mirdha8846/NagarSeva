@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, authUser, getMe, getAuthorityMembers } = require('../controllers/authController');
+const { registerUser, authUser, getMe, getAuthorityMembers, getUsers, updateUserRole, updateUserProfile } = require('../controllers/authController');
 
 /**
  * @swagger
@@ -100,5 +100,10 @@ router.get('/me', protect, getMe);
  *         description: Authority list retrieved
  */
 router.get('/authority', getAuthorityMembers);
+const { authorize } = require('../middleware/authMiddleware');
+
+router.get('/users', protect, authorize('admin'), getUsers);
+router.put('/users/:id/role', protect, authorize('admin'), updateUserRole);
+router.put('/profile', protect, updateUserProfile);
 
 module.exports = router;

@@ -7,14 +7,19 @@ const AuthorityDashboardPage = () => {
   const { user } = useAuth();
   const [issues, setIssues] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, pending: 0, resolved: 0 });
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [updateForm, setUpdateForm] = useState({ status: '', progress: 0, comment: '' });
+  const [activeTab, setActiveTab] = useState('issues');
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+    if (user?.role === 'admin') {
+      fetchUsers();
+    }
+  }, [user]);
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -29,7 +34,6 @@ const AuthorityDashboardPage = () => {
       setIssues(fetchedIssues);
       setProjects(projectsRes.data);
       
-      const statusStats = analyticsRes.data.statusStats || [];
       const total = fetchedIssues.length;
       const pending = fetchedIssues.filter(i => i.status !== 'resolved').length;
       const resolved = fetchedIssues.filter(i => i.status === 'resolved').length;
@@ -39,6 +43,27 @@ const AuthorityDashboardPage = () => {
       console.error('Error fetching dashboard data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const res = await apiClient.get('/auth/users');
+      setUsers(res.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  const handleRoleChange = async (userId, newRole) => {
+    try {
+      await apiClient.put(`/auth/users/${userId}/role`, { role: newRole });
+      fetchUsers();
+      alert(`User role updated to ${newRole}`);
+    } catch (error) {
+      const message = error.response?.data?.message || error.message;
+      console.error('Role update error:', error);
+      alert(`Failed to update role: ${message}`);
     }
   };
 
@@ -70,8 +95,8 @@ const AuthorityDashboardPage = () => {
     <div className="authority-portal">
       <header className="portal-header">
         <div>
-          <h1>Authority Dashboard</h1>
-          <p>Welcome back, Official {user?.name}. You are managing Ward 42.</p>
+          <h1>{user?.role === 'admin' ? 'System Administrator' : 'Authority Dashboard'}</h1>
+          <p>Welcome back, {user?.name}. You have elevated system access.</p>
         </div>
         <div className="portal-stats">
           <div className="mini-stat">
@@ -85,61 +110,123 @@ const AuthorityDashboardPage = () => {
         </div>
       </header>
 
+      {user?.role === 'admin' && (
+        <div className="portal-tabs" style={{ display: 'flex', gap: '16px', marginBottom: '32px', borderBottom: '1px solid var(--outline-variant)' }}>
+          <button 
+            onClick={() => setActiveTab('issues')}
+            style={{ padding: '12px 24px', background: 'none', border: 'none', borderBottom: activeTab === 'issues' ? '2px solid var(--primary)' : 'none', color: activeTab === 'issues' ? 'var(--primary)' : 'var(--on-surface-variant)', fontWeight: 600, cursor: 'pointer' }}
+          >
+            Issue Management
+          </button>
+          <button 
+            onClick={() => setActiveTab('users')}
+            style={{ padding: '12px 24px', background: 'none', border: 'none', borderBottom: activeTab === 'users' ? '2px solid var(--primary)' : 'none', color: activeTab === 'users' ? 'var(--primary)' : 'var(--on-surface-variant)', fontWeight: 600, cursor: 'pointer' }}
+          >
+            Civic Team (User Mgmt)
+          </button>
+        </div>
+      )}
+
       <div className="portal-grid">
         <section className="portal-main">
-          <div className="section-header">
-            <h3>Recent Citizen Reports</h3>
-            <div className="filter-group">
-              <span className="material-symbols-outlined">filter_list</span>
-              <select>
-                <option>All Issues</option>
-                <option>Critical</option>
-                <option>Pending</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="issue-table-wrapper">
-            <table className="issue-table">
-              <thead>
-                <tr>
-                  <th>Issue ID</th>
-                  <th>Reporter</th>
-                  <th>Category</th>
-                  <th>Status</th>
-                  <th>Progress</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {issues.map(issue => (
-                  <tr key={issue._id}>
-                    <td className="mono">#{issue._id.slice(-6).toUpperCase()}</td>
-                    <td>{issue.userId?.name || 'Anonymous'}</td>
-                    <td><span className="tag">{issue.category}</span></td>
-                    <td>
-                      <span className={`status-pill ${issue.status}`}>
-                        {issue.status}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="mini-progress-bg">
-                        <div className="mini-progress-fill" style={{ width: `${issue.progress || 0}%` }}></div>
-                      </div>
-                    </td>
-                    <td>
-                      <button className="update-btn" onClick={() => handleUpdateClick(issue)}>Update</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {activeTab === 'issues' ? (
+            <>
+              <div className="section-header">
+                <h3>Recent Citizen Reports</h3>
+              </div>
+              <div className="issue-table-wrapper">
+                <table className="issue-table">
+                  <thead>
+                    <tr>
+                      <th>Issue ID</th>
+                      <th>Reporter</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th>Progress</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {issues.map(issue => (
+                      <tr key={issue._id}>
+                        <td className="mono">#{issue._id.slice(-6).toUpperCase()}</td>
+                        <td>{issue.userId?.name || 'Anonymous'}</td>
+                        <td><span className="tag">{issue.category}</span></td>
+                        <td><span className={`status-pill ${issue.status}`}>{issue.status}</span></td>
+                        <td>
+                          <div className="mini-progress-bg">
+                            <div className="mini-progress-fill" style={{ width: `${issue.progress || 0}%` }}></div>
+                          </div>
+                        </td>
+                        <td>
+                          <button className="update-btn" onClick={() => handleUpdateClick(issue)}>Update</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="section-header">
+                <h3>Manage Civic Team & Authorities</h3>
+                <p style={{ fontSize: '14px', color: 'var(--on-surface-variant)' }}>Assign 'Authority' roles to citizens to help manage the ward.</p>
+              </div>
+              <div className="issue-table-wrapper">
+                <table className="issue-table">
+                  <thead>
+                    <tr>
+                      <th>User Name</th>
+                      <th>Email</th>
+                      <th>Current Role</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map(u => (
+                      <tr key={u._id}>
+                        <td style={{ fontWeight: 600 }}>{u.name}</td>
+                        <td>{u.email}</td>
+                        <td>
+                          <span className={`status-pill ${u.role}`} style={{ backgroundColor: u.role === 'admin' ? '#7C3AED' : u.role === 'authority' ? '#059669' : '#64748b' }}>
+                            {u.role}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            {u.role !== 'authority' && (
+                              <button 
+                                className="update-btn" 
+                                style={{ backgroundColor: '#059669' }}
+                                onClick={() => handleRoleChange(u._id, 'authority')}
+                              >
+                                Make Authority
+                              </button>
+                            )}
+                            {u.role === 'authority' && (
+                              <button 
+                                className="update-btn" 
+                                style={{ backgroundColor: '#EF4444' }}
+                                onClick={() => handleRoleChange(u._id, 'citizen')}
+                              >
+                                Revoke Access
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </section>
 
         <aside className="portal-sidebar">
           <div className="portal-card">
-            <h3>Ward Projects</h3>
+            <h3>Ward Overview</h3>
             <div className="project-stack">
               {projects.slice(0, 3).map(proj => (
                 <div key={proj._id} className="proj-mini">
@@ -153,21 +240,18 @@ const AuthorityDashboardPage = () => {
                 </div>
               ))}
             </div>
-            <button className="view-all-link">Manage All Projects →</button>
           </div>
 
           <div className="portal-card alert-card">
             <div className="alert-header">
-              <span className="material-symbols-outlined">warning</span>
-              <h4>Urgent Attention</h4>
+              <span className="material-symbols-outlined">verified_user</span>
+              <h4>Authority Access</h4>
             </div>
-            <p>3 water leakage reports in Sector 7 need immediate site inspection.</p>
-            <button className="action-btn">View Reports</button>
+            <p>Only verified officials can update issue statuses and manage government projects.</p>
           </div>
         </aside>
       </div>
 
-      {/* Update Modal */}
       {selectedIssue && (
         <div className="modal-overlay">
           <div className="modal-content">

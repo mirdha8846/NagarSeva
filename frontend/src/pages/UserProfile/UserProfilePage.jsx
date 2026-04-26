@@ -7,14 +7,39 @@ import './UserProfilePage.css';
 const TABS = ['My Reports', 'Activity', 'Voted Issues'];
 
 const UserProfilePage = () => {
-  const { user } = useAuth();
+  const { user, updateUserProfile: updateContext } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('My Reports');
   const [userIssues, setUserIssues] = useState([]);
   const [votedIssues, setVotedIssues] = useState([]);
   const [selectedTimeline, setSelectedTimeline] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({ name: '', bio: '', phone: '' });
   const [loading, setLoading] = useState(true);
   const [votedLoading, setVotedLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setEditForm({
+        name: user.name || '',
+        bio: user.bio || '',
+        phone: user.phone || ''
+      });
+    }
+  }, [user]);
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await apiClient.put('/auth/profile', editForm);
+      updateContext(data);
+      setIsEditModalOpen(false);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile');
+    }
+  };
 
   // Fetch user's reported issues
   useEffect(() => {
@@ -95,15 +120,20 @@ const UserProfilePage = () => {
               </div>
               <h3 className="profile-name">{user?.name}</h3>
               <p className="profile-location">
-                <span className="material-symbols-outlined">location_on</span>
+                <span className="material-symbols-outlined">mail</span>
                 {user?.email}
               </p>
+              {user?.phone && (
+                <p className="profile-location">
+                  <span className="material-symbols-outlined">call</span>
+                  {user.phone}
+                </p>
+              )}
               <div className="member-since">Member since {new Date(user?.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}</div>
             </div>
             
             <div className="profile-actions">
-              <button className="login-button" style={{ height: '36px', fontSize: '13px' }}>Edit Profile</button>
-              <button className="login-button secondary-profile-btn">Share</button>
+              <button className="login-button" style={{ height: '36px', fontSize: '13px' }} onClick={() => setIsEditModalOpen(true)}>Edit Profile</button>
             </div>
           </div>
 
@@ -342,6 +372,61 @@ const UserProfilePage = () => {
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+      {/* Edit Profile Modal */}
+      {isEditModalOpen && (
+        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="modal-content" style={{ backgroundColor: 'white', padding: '32px', borderRadius: '16px', width: '100%', maxWidth: '450px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 600 }}>Edit Your Profile</h2>
+              <button onClick={() => setIsEditModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="form-group">
+                <label className="form-label">DISPLAY NAME</label>
+                <input 
+                  type="text" 
+                  className="login-input" 
+                  style={{ paddingLeft: '12px' }}
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">PHONE NUMBER</label>
+                <input 
+                  type="tel" 
+                  className="login-input" 
+                  style={{ paddingLeft: '12px' }}
+                  placeholder="+91 00000 00000"
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">BIO / DESCRIPTION</label>
+                <textarea 
+                  className="login-input" 
+                  style={{ paddingLeft: '12px', paddingTop: '12px', height: '100px', resize: 'none' }}
+                  placeholder="Tell the community about yourself..."
+                  value={editForm.bio}
+                  onChange={(e) => setEditForm({...editForm, bio: e.target.value})}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+                <button type="button" className="login-button secondary-profile-btn" onClick={() => setIsEditModalOpen(false)}>Cancel</button>
+                <button type="submit" className="login-button">Save Changes</button>
+              </div>
+            </form>
           </div>
         </div>
       )}

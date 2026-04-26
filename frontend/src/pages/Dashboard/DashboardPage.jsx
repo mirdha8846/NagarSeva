@@ -63,15 +63,23 @@ const ProgressBarCard = ({ icon, color, bgColor, label, value, percentage }) => 
 );
 
 const getMarkerIcon = (status) => {
-  let color = 'var(--error)'; // open
-  if (status === 'resolved') color = '#059669';
-  if (status === 'in_progress') color = '#D97706';
+  let color = '#EF4444'; // default red for open
+  let className = 'custom-status-icon';
+  
+  if (status === 'resolved') color = '#10B981'; // green
+  if (status === 'in_progress') {
+    color = '#F59E0B'; // orange
+    className += ' status-pulse-orange';
+  }
+  if (status === 'open') {
+    className += ' status-pulse-red';
+  }
   
   return L.divIcon({
-    className: 'custom-status-icon',
-    html: `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7]
+    className: className,
+    html: `<div style="background-color: ${color}; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.3);"></div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9]
   });
 };
 
@@ -82,8 +90,9 @@ const DashboardPage = () => {
   const [recentIssues, setRecentIssues] = useState([]);
   const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userLocation, setUserLocation] = useState(null); // null = no geo filter (GPS not yet acquired)
+  const [userLocation, setUserLocation] = useState(null);
   const [locationFetched, setLocationFetched] = useState(false);
+  const [mapFilter, setMapFilter] = useState({ category: 'All', status: 'All' });
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -211,8 +220,21 @@ const DashboardPage = () => {
           <div className="card-header">
             <h3 className="card-title">Local Issue Map</h3>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="send-otp-btn" style={{ padding: '4px 12px', border: '1px solid var(--outline)', backgroundColor: 'var(--surface-container)' }}>All</button>
-              <button className="send-otp-btn" style={{ padding: '4px 12px', border: '1px solid var(--outline-variant)', backgroundColor: 'transparent', color: 'var(--on-surface-variant)' }}>Pothole</button>
+              {['All', 'Pothole', 'Water', 'Waste'].map(cat => (
+                <button 
+                  key={cat}
+                  className="send-otp-btn" 
+                  style={{ 
+                    padding: '4px 12px', 
+                    border: '1px solid var(--outline)', 
+                    backgroundColor: mapFilter.category === cat ? 'var(--primary)' : 'var(--surface-container)',
+                    color: mapFilter.category === cat ? 'white' : 'var(--on-surface)'
+                  }}
+                  onClick={() => setMapFilter(prev => ({ ...prev, category: cat }))}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
           <div className="map-placeholder" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
@@ -237,18 +259,44 @@ const DashboardPage = () => {
                 </CircleMarker>
               )}
 
-              {allIssues.filter(i => i.location?.coordinates).map(issue => (
-                <Marker 
-                  key={issue._id} 
-                  position={[issue.location.coordinates[1], issue.location.coordinates[0]]}
-                  icon={getMarkerIcon(issue.status)}
-                >
-                  <Popup>
-                    <strong>{issue.title}</strong><br/>
-                    <span style={{ fontSize: '11px', color: 'var(--on-surface-variant)' }}>Status: {issue.status}</span>
-                  </Popup>
-                </Marker>
-              ))}
+              {allIssues
+                .filter(i => {
+                  const hasCoords = i.location?.coordinates;
+                  const matchesCat = mapFilter.category === 'All' || i.category === mapFilter.category;
+                  const matchesStatus = mapFilter.status === 'All' || i.status === mapFilter.status;
+                  return hasCoords && matchesCat && matchesStatus;
+                })
+                .map((issue, idx) => {
+                  // Add a tiny jitter to markers at the exact same location to make them all visible
+                  const jitter = 0.0001; 
+                  const lat = issue.location.coordinates[1] + (Math.random() - 0.5) * jitter;
+                  const lng = issue.location.coordinates[0] + (Math.random() - 0.5) * jitter;
+                  
+                  return (
+                    <Marker 
+                      key={issue._id} 
+                      position={[lat, lng]}
+                      icon={getMarkerIcon(issue.status)}
+                    >
+                      <Popup>
+                        <div style={{ padding: '4px' }}>
+                          <strong style={{ display: 'block', marginBottom: '4px' }}>{issue.title}</strong>
+                          <div style={{ display: 'flex', gap: '6px', marginBottom: '8px' }}>
+                            <span className={`status-pill ${issue.status}`} style={{ fontSize: '10px', padding: '2px 8px' }}>{issue.status}</span>
+                            <span style={{ fontSize: '10px', color: 'var(--on-surface-variant)' }}>{issue.category}</span>
+                          </div>
+                          <button 
+                            className="login-button" 
+                            style={{ height: '28px', fontSize: '11px', width: '100%' }}
+                            onClick={() => navigate('/community-feed')}
+                          >
+                            View Details
+                          </button>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  );
+                })}
             </MapContainer>
             
             <div style={{ position: 'absolute', bottom: '16px', left: '16px', zIndex: 1000, backgroundColor: 'rgba(255,255,255,0.9)', padding: '12px', borderRadius: '8px', border: '1px solid var(--outline-variant)', fontSize: '12px', pointerEvents: 'none' }}>

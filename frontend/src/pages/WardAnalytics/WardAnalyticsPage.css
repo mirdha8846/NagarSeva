@@ -150,9 +150,6 @@
   height: 192px;
   border-radius: 50%;
   border: 16px solid var(--surface-container);
-  border-top-color: var(--primary);
-  border-right-color: #006948;
-  border-bottom-color: var(--error);
   position: relative;
   display: flex;
   align-items: center;
@@ -203,116 +200,6 @@
   margin-left: auto;
   font-family: var(--font-mono);
   color: var(--on-surface);
-}
-
-/* Trends Card */
-.trends-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.trend-labels {
-  display: flex;
-  gap: 16px;
-  font-size: 12px;
-  color: var(--on-surface-variant);
-}
-
-.trend-label-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.trend-label-item .line {
-  width: 12px;
-  height: 2px;
-}
-
-.trend-label-item .line.red { background-color: var(--error); }
-.trend-label-item .line.green { background-color: #006948; }
-
-.line-chart-canvas {
-  flex: 1;
-  position: relative;
-  margin-top: 24px;
-  border-left: 1px solid var(--outline-variant);
-  border-bottom: 1px solid var(--outline-variant);
-  padding: 8px 0 24px 8px;
-}
-
-.trend-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.chart-x-axis {
-  position: absolute;
-  bottom: 0;
-  left: 8px;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--outline);
-}
-
-/* Sub-Area Performance */
-.performance-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.area-perf-card {
-  background-color: var(--surface);
-  border: 1px solid var(--outline-variant);
-  border-radius: 8px;
-  padding: 24px;
-  transition: box-shadow 0.2s;
-}
-
-.area-perf-card:hover {
-  box-shadow: var(--shadow-sm);
-}
-
-.area-name {
-  font-family: var(--font-headline);
-  font-size: 20px;
-  font-weight: 600;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--outline-variant);
-  margin-bottom: 16px;
-}
-
-.area-metrics {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.metric-label {
-  font-family: var(--font-label-caps);
-  font-size: 10px;
-  color: var(--on-surface-variant);
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
-  display: block;
-}
-
-.metric-value-large {
-  font-family: var(--font-mono);
-  font-size: 24px;
-  color: var(--on-surface);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.trend-arrow {
-  font-size: 18px;
 }
 
 @media (max-width: 1024px) {

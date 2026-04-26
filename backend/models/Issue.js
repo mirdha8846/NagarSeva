@@ -40,7 +40,19 @@ const issueSchema = new mongoose.Schema({
   votesCount: {
     type: Number,
     default: 0
-  }
+  },
+  progress: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 100
+  },
+  statusUpdates: [{
+    status: String,
+    comment: String,
+    updatedAt: { type: Date, default: Date.now },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  }]
 }, {
   timestamps: true
 });

@@ -12,6 +12,7 @@ const UserProfilePage = () => {
   const [activeTab, setActiveTab] = useState('My Reports');
   const [userIssues, setUserIssues] = useState([]);
   const [votedIssues, setVotedIssues] = useState([]);
+  const [selectedTimeline, setSelectedTimeline] = useState(null);
   const [loading, setLoading] = useState(true);
   const [votedLoading, setVotedLoading] = useState(false);
 
@@ -194,10 +195,13 @@ const UserProfilePage = () => {
                   statusClass={issue.status === 'resolved' ? 'status-success' : issue.status === 'in_progress' ? 'status-warn' : ''}
                   title={issue.title}
                   desc={issue.description}
+                  progress={issue.progress || 0}
+                  statusUpdates={issue.statusUpdates || []}
                   date={new Date(issue.createdAt).toLocaleDateString()}
                   votes={issue.votesCount || 0}
                   image={issue.images?.[0] ? `http://localhost:5000/${issue.images[0]}` : "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop"}
                   fixedDate={issue.status === 'resolved' ? new Date(issue.updatedAt).toLocaleDateString() : null}
+                  onTrackStatus={setSelectedTimeline}
                 />
               )) : (
                 <div className="empty-history">
@@ -291,11 +295,61 @@ const UserProfilePage = () => {
           )}
         </main>
       </div>
+
+      {/* Timeline Modal */}
+      {selectedTimeline && (
+        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="modal-content" style={{ backgroundColor: 'white', padding: '32px', borderRadius: '16px', width: '100%', maxWidth: '500px', maxHeight: '80vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h2>Issue Timeline</h2>
+              <button onClick={() => setSelectedTimeline(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>{selectedTimeline.title}</h3>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <span className={`status-pill ${selectedTimeline.status}`} style={{ padding: '4px 12px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, textTransform: 'capitalize' }}>
+                  {selectedTimeline.status}
+                </span>
+                <span style={{ fontSize: '14px', fontWeight: 500 }}>{selectedTimeline.progress}% Complete</span>
+              </div>
+            </div>
+
+            <div className="timeline-stack" style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'relative', paddingLeft: '24px' }}>
+              <div style={{ position: 'absolute', left: '7px', top: '10px', bottom: '10px', width: '2px', backgroundColor: 'var(--outline-variant)' }}></div>
+              
+              {selectedTimeline.statusUpdates?.length > 0 ? [...selectedTimeline.statusUpdates].reverse().map((update, idx) => (
+                <div key={idx} style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '-22px', top: '4px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: 'var(--primary)', border: '2px solid white' }}></div>
+                  <div style={{ fontSize: '12px', color: 'var(--on-surface-variant)', fontWeight: 600, marginBottom: '4px' }}>
+                    {new Date(update.updatedAt).toLocaleDateString()} • {update.status.toUpperCase()}
+                  </div>
+                  <div style={{ fontSize: '14px', color: 'var(--on-surface)', lineHeight: 1.4 }}>
+                    {update.comment}
+                  </div>
+                </div>
+              )) : (
+                <div style={{ color: 'var(--on-surface-variant)', fontSize: '14px' }}>No updates published yet. Check back soon.</div>
+              )}
+            </div>
+            
+            <button 
+              className="login-button" 
+              style={{ marginTop: '32px' }}
+              onClick={() => setSelectedTimeline(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const ReportItem = ({ id, status, statusClass, title, desc, date, votes, image, fixedDate }) => (
+const ReportItem = ({ id, status, statusClass, title, desc, progress, statusUpdates, date, votes, image, fixedDate, onTrackStatus }) => (
   <div className="report-card-item">
     <div className="report-img-wrapper">
       <img src={image} alt={title} />
@@ -306,12 +360,30 @@ const ReportItem = ({ id, status, statusClass, title, desc, date, votes, image, 
           <span className={`status-pill ${statusClass}`}>{status}</span>
           <span className="report-id">#{id}</span>
         </div>
-        <button className="icon-btn-small">
-          <span className="material-symbols-outlined">more_vert</span>
+        <button className="icon-btn-small" onClick={() => onTrackStatus({ id, title, status, progress, statusUpdates })}>
+          <span className="material-symbols-outlined">analytics</span>
         </button>
       </div>
       <h4 className="report-card-title">{title}</h4>
       <p className="report-card-desc">{desc}</p>
+      
+      {/* Progress Bar */}
+      <div style={{ margin: '8px 0 12px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px', color: 'var(--on-surface-variant)' }}>
+          <span>Resolution Progress</span>
+          <span>{progress || 0}%</span>
+        </div>
+        <div className="progress-container" style={{ height: '6px', backgroundColor: 'var(--outline-variant)' }}>
+          <div 
+            className="progress-fill" 
+            style={{ 
+              height: '6px', 
+              width: `${progress || 0}%`, 
+              backgroundColor: status === 'resolved' ? '#059669' : status === 'in_progress' ? '#D97706' : 'var(--primary)'
+            }}
+          ></div>
+        </div>
+      </div>
       <div className="report-card-footer">
         <div className="footer-left">
           <span className="footer-meta"><span className="material-symbols-outlined">calendar_today</span> {date}</span>

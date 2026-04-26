@@ -9,6 +9,7 @@ const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('citizen');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,7 +18,7 @@ const RegisterPage = () => {
     setError('');
     setIsLoading(true);
     try {
-      await signup(name, email, password);
+      await signup(name, email, password, role);
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please check your data.');
@@ -98,6 +99,23 @@ const RegisterPage = () => {
                   />
                 </div>
                 <p className="password-hint">Must be at least 8 characters long.</p>
+              </div>
+
+              {/* Role Selection (Temporary for Testing) */}
+              <div className="form-group">
+                <label className="form-label" htmlFor="role">ACCOUNT TYPE</label>
+                <select 
+                  id="role" 
+                  className="login-input" 
+                  style={{ paddingLeft: '12px', height: '48px' }}
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <option value="citizen">Citizen (Default)</option>
+                  <option value="authority">Civic Authority (Govt Official)</option>
+                  <option value="admin">Platform Administrator</option>
+                </select>
+                <p className="password-hint">Select 'Civic Authority' to test the new Admin Dashboard.</p>
               </div>
 
               {/* Terms */}

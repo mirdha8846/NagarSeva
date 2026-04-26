@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../api/apiClient';
 import './CommunityFeedPage.css';
 
-const IssueCard = ({ id, category, time, title, description, images, author, likes: initialLikes, userVote, comments, petition, onStartPetition, onSignPetition }) => {
+const IssueCard = ({ id, category, time, title, description, progress, status, statusUpdates, images, author, likes: initialLikes, userVote, comments, petition, onStartPetition, onSignPetition, onTrackStatus }) => {
   const [likes, setLikes] = useState(initialLikes || 0);
   const [liked, setLiked] = useState(userVote === 'upvote');
   const [disliked, setDisliked] = useState(userVote === 'downvote');
@@ -40,6 +40,28 @@ const IssueCard = ({ id, category, time, title, description, images, author, lik
         <span className="card-time">{new Date(time).toLocaleDateString()}</span>
       </div>
       <h3 className="card-title">{title}</h3>
+      
+      {/* Resolution Progress */}
+      <div style={{ margin: '12px 0 16px 0', padding: '12px', backgroundColor: 'var(--surface-container-low)', borderRadius: '8px', border: '1px solid var(--outline-variant)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px', fontWeight: 600, color: 'var(--on-surface-variant)' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>engineering</span>
+            Resolution Progress
+          </span>
+          <span>{progress || 0}%</span>
+        </div>
+        <div className="progress-container" style={{ height: '8px', backgroundColor: 'var(--outline-variant)' }}>
+          <div 
+            className="progress-fill" 
+            style={{ 
+              height: '8px', 
+              width: `${progress || 0}%`, 
+              backgroundColor: progress === 100 ? '#059669' : progress > 0 ? '#D97706' : 'var(--primary)'
+            }}
+          ></div>
+        </div>
+      </div>
+
       <p className="card-description">{description}</p>
       {images && images.length > 0 && <img src={`http://localhost:5000/${images[0]}`} alt={title} className="card-image" />}
       
@@ -78,6 +100,15 @@ const IssueCard = ({ id, category, time, title, description, images, author, lik
             <span className={`material-symbols-outlined ${disliked ? 'fill' : ''}`} style={{ fontSize: '18px' }}>thumb_down</span>
           </button>
           
+          <button 
+            className="social-btn" 
+            style={{ color: 'var(--primary)', fontWeight: 600 }}
+            onClick={() => onTrackStatus({ id, title, status, progress, statusUpdates })}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>analytics</span>
+            Track Status
+          </button>
+
           {!petition && (
             <button className="social-btn" style={{ color: 'var(--primary)', fontWeight: 500, borderColor: 'var(--primary)' }} onClick={() => onStartPetition(id, title)}>
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>campaign</span>
@@ -130,6 +161,7 @@ const PetitionCard = ({ petition, onSignPetition }) => {
 const CommunityFeedPage = () => {
   const [issues, setIssues] = useState([]);
   const [petitions, setPetitions] = useState([]);
+  const [selectedTimeline, setSelectedTimeline] = useState(null);
   const [viewMode, setViewMode] = useState('issues'); // 'issues' or 'petitions'
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('All');
@@ -311,6 +343,9 @@ const CommunityFeedPage = () => {
                   time={issue.createdAt}
                   title={issue.title}
                   description={issue.description}
+                  progress={issue.progress || 0}
+                  status={issue.status}
+                  statusUpdates={issue.statusUpdates || []}
                   images={issue.images}
                   author={issue.userId?.name}
                   likes={issue.votesCount || 0}
@@ -319,6 +354,7 @@ const CommunityFeedPage = () => {
                   petition={petitions.find(p => p.issueId?._id === issue._id || p.issueId === issue._id)}
                   onStartPetition={handleStartPetition}
                   onSignPetition={handleSignPetition}
+                  onTrackStatus={setSelectedTimeline}
                 />
               ))
             ) : (
@@ -386,6 +422,55 @@ const CommunityFeedPage = () => {
           </div>
         </div>
       </aside>
+      {/* Timeline Modal */}
+      {selectedTimeline && (
+        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="modal-content" style={{ backgroundColor: 'white', padding: '32px', borderRadius: '16px', width: '100%', maxWidth: '500px', maxHeight: '80vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h2>Issue Timeline</h2>
+              <button onClick={() => setSelectedTimeline(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>{selectedTimeline.title}</h3>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <span className={`status-pill ${selectedTimeline.status}`} style={{ padding: '4px 12px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, textTransform: 'capitalize' }}>
+                  {selectedTimeline.status}
+                </span>
+                <span style={{ fontSize: '14px', fontWeight: 500 }}>{selectedTimeline.progress}% Complete</span>
+              </div>
+            </div>
+
+            <div className="timeline-stack" style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'relative', paddingLeft: '24px' }}>
+              <div style={{ position: 'absolute', left: '7px', top: '10px', bottom: '10px', width: '2px', backgroundColor: 'var(--outline-variant)' }}></div>
+              
+              {selectedTimeline.statusUpdates?.length > 0 ? [...selectedTimeline.statusUpdates].reverse().map((update, idx) => (
+                <div key={idx} style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '-22px', top: '4px', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: 'var(--primary)', border: '2px solid white' }}></div>
+                  <div style={{ fontSize: '12px', color: 'var(--on-surface-variant)', fontWeight: 600, marginBottom: '4px' }}>
+                    {new Date(update.updatedAt).toLocaleDateString()} • {update.status.toUpperCase()}
+                  </div>
+                  <div style={{ fontSize: '14px', color: 'var(--on-surface)', lineHeight: 1.4 }}>
+                    {update.comment}
+                  </div>
+                </div>
+              )) : (
+                <div style={{ color: 'var(--on-surface-variant)', fontSize: '14px' }}>No updates published yet. Check back soon.</div>
+              )}
+            </div>
+            
+            <button 
+              className="login-button" 
+              style={{ marginTop: '32px' }}
+              onClick={() => setSelectedTimeline(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

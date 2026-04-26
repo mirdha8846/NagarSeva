@@ -1,7 +1,3 @@
-.authority-container {
-  /* Padding and layout handled by MainLayout */
-}
-
 .authority-header {
   margin-bottom: 48px;
 }
@@ -192,4 +188,195 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+/* Dashboard Styles */
+.authority-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: 32px;
+}
+
+.dashboard-tab {
+  padding: 12px 24px;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dashboard-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.admin-card-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.admin-card {
+  background-color: white;
+  border: 1px solid var(--outline-variant);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.admin-card-info {
+  flex: 1;
+}
+
+.admin-card-title {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.admin-card-subtitle {
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.progress-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-input {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+.status-select {
+  padding: 8px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 4px;
+  background-color: white;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input, .form-group textarea {
+  padding: 12px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-outline {
+  background: none;
+  border: 1px solid var(--outline-variant);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .admin-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .admin-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

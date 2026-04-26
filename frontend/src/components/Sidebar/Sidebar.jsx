@@ -6,7 +6,8 @@ import './Sidebar.css';
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const isAdmin = user?.role === 'admin' || user?.role === 'authority';
 
   const handleLogout = () => {
     logout();
@@ -17,7 +18,8 @@ const Sidebar = () => {
     { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
     { path: '/community', label: 'Community Feed', icon: 'groups' },
     { path: '/projects', label: 'Govt. Projects', icon: 'account_balance' },
-    { path: '/authority', label: 'Civic Authority', icon: 'badge' },
+    { path: '/authority', label: 'Civic Directory', icon: 'badge' },
+    ...(isAdmin ? [{ path: '/authority-portal', label: 'Authority Portal', icon: 'admin_panel_settings' }] : []),
     { path: '/analytics', label: 'Ward Analytics', icon: 'monitoring' },
     { path: '/profile', label: 'Profile Settings', icon: 'settings' },
   ];

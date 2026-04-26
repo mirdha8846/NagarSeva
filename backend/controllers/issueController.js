@@ -78,7 +78,10 @@ const getIssues = async (req, res) => {
   }
 
   // Combine for search but run count on non-spatial query to avoid error
-  const issuesQuery = Issue.find({ ...query, ...spatialQuery }).populate('userId', 'name').sort({ createdAt: -1 });
+  const issuesQuery = Issue.find({ ...query, ...spatialQuery })
+    .populate('userId', 'name')
+    .populate('statusUpdates.updatedBy', 'name role')
+    .sort({ createdAt: -1 });
   
   if (limit) {
     issuesQuery.limit(parseInt(limit));
@@ -119,7 +122,9 @@ const getIssues = async (req, res) => {
 // @route   GET /api/issues/:id
 // @access  Public
 const getIssueById = async (req, res) => {
-  const issue = await Issue.findById(req.params.id).populate('userId', 'name');
+  const issue = await Issue.findById(req.params.id)
+    .populate('userId', 'name')
+    .populate('statusUpdates.updatedBy', 'name role');
 
   if (issue) {
     res.json(issue);
@@ -132,11 +137,25 @@ const getIssueById = async (req, res) => {
 // @route   PATCH /api/issues/:id/status
 // @access  Private (Admin/Authority)
 const updateIssueStatus = async (req, res) => {
-  const { status } = req.body;
+  const { status, progress, comment } = req.body;
   const issue = await Issue.findById(req.params.id);
 
   if (issue) {
-    issue.status = status;
+    if (status) issue.status = status;
+    if (progress !== undefined) issue.progress = progress;
+    
+    // Add to timeline
+    issue.statusUpdates.push({
+      status: status || issue.status,
+      comment: comment || `Status updated to ${status || issue.status}`,
+      updatedBy: req.user._id
+    });
+
+    // Automatically set status to resolved if progress is 100
+    if (issue.progress === 100) issue.status = 'resolved';
+    // Automatically set status to in_progress if progress > 0 and < 100
+    if (issue.progress > 0 && issue.progress < 100) issue.status = 'in_progress';
+
     const updatedIssue = await issue.save();
     res.json(updatedIssue);
   } else {

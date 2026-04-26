@@ -277,7 +277,26 @@ const DashboardPage = () => {
                     border: '1px solid rgba(0,0,0,0.1)'
                   }}>{issue.status}</span>
                 </div>
-                <h4 style={{ fontSize: '16px', fontWeight: 500, margin: '0 0 12px 0' }}>{issue.title}</h4>
+                <h4 style={{ fontSize: '16px', fontWeight: 500, margin: '0 0 4px 0' }}>{issue.title}</h4>
+                
+                {/* Progress Bar for Issue */}
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px', color: 'var(--on-surface-variant)' }}>
+                    <span>Resolution Progress</span>
+                    <span>{issue.progress || 0}%</span>
+                  </div>
+                  <div className="progress-container" style={{ height: '6px', backgroundColor: 'var(--outline-variant)' }}>
+                    <div 
+                      className="progress-fill" 
+                      style={{ 
+                        height: '6px', 
+                        width: `${issue.progress || 0}%`, 
+                        backgroundColor: issue.status === 'resolved' ? '#059669' : issue.status === 'in_progress' ? '#D97706' : 'var(--primary)'
+                      }}
+                    ></div>
+                  </div>
+                </div>
+
                 <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--on-surface-variant)' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span className="material-symbols-outlined" style={{ fontSize: '16px' }}>location_on</span> {issue.location?.address || 'N/A'}</span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span className="material-symbols-outlined" style={{ fontSize: '16px' }}>schedule</span> {new Date(issue.createdAt).toLocaleDateString()}</span>
